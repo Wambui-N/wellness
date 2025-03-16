@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
-
-export default nextConfig;
+const nextConfig = {
+    images: {
+      domains: ['fabulous-parakeet-759.convex.cloud']
+    }
+  }
+  
+  export default nextConfig
