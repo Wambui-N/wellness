@@ -76,7 +76,8 @@ export const createPost = mutation({
     slug: v.string(),
     excerpt: v.string(),
     content: v.string(),
-    coverImageId: v.optional(v.id('_storage'))
+    coverImageId: v.optional(v.id('_storage')),
+    tags: v.array(v.id('tags'))
   },
   handler: async (ctx, args) => {
     const user = await getCurrentUserOrThrow(ctx)

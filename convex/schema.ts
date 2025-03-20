@@ -10,6 +10,7 @@ export default defineSchema({
     imageUrl: v.optional(v.string()),
     posts: v.optional(v.array(v.id('posts')))
   }).index('byClerkUserId', ['clerkUserId']),
+
   posts: defineTable({
     title: v.string(),
     slug: v.string(),
@@ -17,6 +18,11 @@ export default defineSchema({
     content: v.string(),
     coverImageId: v.optional(v.id('_storage')),
     authorId: v.id('users'),
-    likes: v.number()
-  }).index('bySlug', ['slug'])
+    likes: v.number(),
+    tags: v.array(v.id('tags')) 
+  }).index('bySlug', ['slug']),
+
+  tags: defineTable({
+    name: v.string(),
+  }),
 })

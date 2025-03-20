@@ -11,6 +11,7 @@ export type Post = {
   content: string
   authorId: Id<'users'>
   likes: number
+  tags: string[]
   author: {
     _id: Id<'users'>
     _creationTime: number
