@@ -99,6 +99,12 @@ import {
         class: cx('border-l-4 border-primary')
       }
     },
+    heading: {
+      levels: [1, 2, 3],
+      HTMLAttributes: {
+        class: cx('font-bold')
+      }
+    },
     codeBlock: {
       HTMLAttributes: {
         class: cx(

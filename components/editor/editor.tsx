@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-// import { useDebouncedCallback } from 'use-debounce'
+import { useDebouncedCallback } from 'use-debounce'
 
 import { cn } from '@/lib/utils'
 import { Post } from '@/lib/types'
@@ -33,6 +33,9 @@ import { MathSelector } from '@/components/editor/selectors/math-selector'
 import { ColorSelector } from '@/components/editor/selectors/color-selector'
 
 import { Separator } from '@/components/ui/separator'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Info } from 'lucide-react'
 
 const hljs = require('highlight.js')
 
@@ -52,68 +55,116 @@ interface EditorProps {
   post?: Post
   editable?: boolean
   setContent?: (content: JSONContent) => void
+  autoSave?: boolean
+  storageKey?: string
 }
 
 export default function Editor({
   post,
   editable = true,
-  setContent
+  setContent,
+  autoSave = true,
+  storageKey = 'editor-content'
 }: EditorProps) {
-  // const [initialContent, setInitialContent] = useState<null | JSONContent>(null)
   const [saveStatus, setSaveStatus] = useState('Saved')
-  const [charsCount, setCharsCount] = useState()
+  const [isLoading, setIsLoading] = useState(true)
+  const [stats, setStats] = useState({ words: 0, characters: 0 })
+  const [error, setError] = useState<string | null>(null)
 
   const [openNode, setOpenNode] = useState(false)
   const [openColor, setOpenColor] = useState(false)
   const [openLink, setOpenLink] = useState(false)
   const [openAI, setOpenAI] = useState(false)
 
-  //Apply Codeblock Highlighting on the HTML from editor.getHTML()
+  const initialContent = post?.content
+    ? JSON.parse(post.content)
+    : defaultEditorContent
+
+  // Auto-save functionality
+  const debouncedUpdates = useDebouncedCallback(
+    async (editor: EditorInstance) => {
+      try {
+        const json = editor.getJSON()
+        const stats = editor.storage.characterCount
+        setStats({
+          words: stats.words(),
+          characters: stats.characters()
+        })
+        
+        if (autoSave) {
+          window.localStorage.setItem(
+            `${storageKey}-novel-content`,
+            JSON.stringify(json)
+          )
+          // Only try to save markdown if the extension is available
+          if (editor.storage.markdown) {
+            window.localStorage.setItem(
+              `${storageKey}-markdown`,
+              editor.storage.markdown.getMarkdown()
+            )
+          }
+          setSaveStatus('Saved')
+          setError(null)
+        }
+      } catch (err) {
+        console.error('Error saving content:', err)
+        setError('Failed to save content. Please try again.')
+        setSaveStatus('Error')
+      }
+    },
+    1000
+  )
+
+  // Load saved content on mount
+  useEffect(() => {
+    try {
+      if (autoSave) {
+        const savedContent = window.localStorage.getItem(`${storageKey}-novel-content`)
+        if (savedContent) {
+          setContent?.(JSON.parse(savedContent))
+        }
+      }
+      setIsLoading(false)
+    } catch (err) {
+      console.error('Error loading saved content:', err)
+      setError('Failed to load saved content. Starting fresh.')
+      setIsLoading(false)
+    }
+  }, [autoSave, storageKey])
+
+  // Apply Codeblock Highlighting
   const highlightCodeblocks = (content: string) => {
     const doc = new DOMParser().parseFromString(content, 'text/html')
     doc.querySelectorAll('pre code').forEach(el => {
       // @ts-ignore
-      // https://highlightjs.readthedocs.io/en/latest/api.html?highlight=highlightElement#highlightelement
       hljs.highlightElement(el)
     })
     return new XMLSerializer().serializeToString(doc)
   }
 
-  const initialContent = post?.content
-    ? JSON.parse(post.content)
-    : defaultEditorContent
-
-  // const debouncedUpdates = useDebouncedCallback(
-  //   async (editor: EditorInstance) => {
-  //     const json = editor.getJSON()
-  //     setCharsCount(editor.storage.characterCount.words())
-  //     window.localStorage.setItem(
-  //       `${lesson.id}-html-content`,
-  //       highlightCodeblocks(editor.getHTML())
-  //     )
-  //     window.localStorage.setItem(
-  //       `${lesson.id}-novel-content`,
-  //       JSON.stringify(json)
-  //     )
-  //     window.localStorage.setItem(
-  //       `${lesson.id}-markdown`,
-  //       editor.storage.markdown.getMarkdown()
-  //     )
-  //     setSaveStatus('Saved')
-  //   },
-  //   500
-  // )
-
-  // useEffect(() => {
-  //   const content = window.localStorage.getItem(`${lesson.id}-novel-content`)
-  //   if (content) setInitialContent(JSON.parse(content))
-  //   else setInitialContent(defaultEditorContent)
-  // }, [])
-
-  if (!initialContent) return null
+  if (isLoading) {
+    return (
+      <div className="w-full max-w-screen-lg space-y-4">
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-[450px] w-full" />
+      </div>
+    )
+  }
 
   return (
-    <div className='relative w-full max-w-screen-lg'>
+    <div className='relative w-full max-w-screen-lg space-y-4'>
+      {/* Editor Instructions */}
+      <Alert className="bg-muted/50">
+        <Info className="h-4 w-4" />
+        <AlertDescription>
+          <p className="text-sm text-muted-foreground">
+            Start typing to begin. Use the toolbar above for formatting. Press{' '}
+            <kbd className="rounded bg-muted px-2 py-1 text-xs">Ctrl/Cmd + S</kbd>{' '}
+            to save manually.
+          </p>
+        </AlertDescription>
+      </Alert>
+
       <EditorRoot>
         <EditorContent
           immediatelyRender={false}
@@ -122,23 +173,33 @@ export default function Editor({
           className={cn(
             'relative w-full max-w-screen-lg bg-background',
             editable
-              ? 'h-[450px] overflow-scroll rounded-md border border-input shadow-sm'
+              ? 'min-h-[450px] max-h-[600px] overflow-y-auto rounded-md border border-input shadow-sm p-4'
               : 'min-h-[500px]'
           )}
           editorProps={{
             handleDOMEvents: {
-              keydown: (_view, event) => handleCommandNavigation(event)
+              keydown: (view, event) => {
+                // Handle keyboard shortcuts
+                if ((event.metaKey || event.ctrlKey) && event.key === 's') {
+                  event.preventDefault()
+                  setSaveStatus('Saving...')
+                  return true
+                }
+                return handleCommandNavigation(event)
+              }
             },
-            handlePaste: (view, event) =>
-              handleImagePaste(view, event, uploadFn),
+            handlePaste: (view, event) => handleImagePaste(view, event, uploadFn),
             handleDrop: (view, event, _slice, moved) =>
               handleImageDrop(view, event, moved, uploadFn),
             attributes: {
-              class: `prose dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full ${editable ? 'cursor-text text-sm' : 'cursor-default !p-0'}`
+              class: `prose dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full ${
+                editable ? 'cursor-text text-sm' : 'cursor-default !p-0'
+              }`,
+              'data-placeholder': 'Type / for commands...'
             }
           }}
           onUpdate={({ editor }) => {
-            // debouncedUpdates(editor)
+            debouncedUpdates(editor)
             setSaveStatus('Unsaved')
             if (setContent) setContent(editor.getJSON())
           }}
@@ -147,6 +208,30 @@ export default function Editor({
           }}
           slotAfter={<ImageResizer />}
         >
+          <div className="absolute bottom-2 right-2 flex items-center gap-2 text-xs text-muted-foreground">
+            <span>{stats.words} words</span>
+            <span>•</span>
+            <span>{stats.characters} characters</span>
+            <span>•</span>
+            <span className={cn(
+              saveStatus === 'Error' && 'text-red-500',
+              saveStatus === 'Unsaved' && 'text-yellow-500',
+              saveStatus === 'Saved' && 'text-green-500'
+            )}>
+              {saveStatus}
+            </span>
+          </div>
+
+          {error && (
+            <div className="absolute top-2 right-2">
+              <Alert variant="destructive" className="bg-destructive/10">
+                <AlertDescription className="text-xs">
+                  {error}
+                </AlertDescription>
+              </Alert>
+            </div>
+          )}
+
           <EditorCommand className='z-50 h-auto max-h-[330px] overflow-y-auto rounded-md border border-muted bg-background px-1 py-2 shadow-md transition-all'>
             <EditorCommandEmpty className='px-2 text-muted-foreground'>
               No results
@@ -176,16 +261,12 @@ export default function Editor({
           <EditorMenu open={openAI} onOpenChange={setOpenAI}>
             <Separator orientation='vertical' />
             <NodeSelector open={openNode} onOpenChange={setOpenNode} />
-
             <Separator orientation='vertical' />
             <LinkSelector open={openLink} onOpenChange={setOpenLink} />
-
             <Separator orientation='vertical' />
             <MathSelector />
-
             <Separator orientation='vertical' />
             <TextButtons />
-
             <Separator orientation='vertical' />
             <ColorSelector open={openColor} onOpenChange={setOpenColor} />
           </EditorMenu>

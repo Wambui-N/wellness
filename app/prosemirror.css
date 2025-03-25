@@ -1,5 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .ProseMirror {
   @apply p-6;
+}
+
+.ProseMirror h1 {
+  @apply text-4xl font-bold mb-4;
+}
+
+.ProseMirror h2 {
+  @apply text-3xl font-bold mb-3;
+}
+
+.ProseMirror h3 {
+  @apply text-2xl font-bold mb-2;
 }
 
 .ProseMirror .is-editor-empty:first-child::before {
@@ -8,13 +24,16 @@
   color: hsl(var(--muted-foreground));
   pointer-events: none;
   height: 0;
+  display: block;
 }
+
 .ProseMirror .is-empty::before {
   content: attr(data-placeholder);
   float: left;
   color: hsl(var(--muted-foreground));
   pointer-events: none;
   height: 0;
+  display: block;
 }
 
 /* Custom image styles */

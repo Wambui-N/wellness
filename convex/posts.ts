@@ -13,10 +13,15 @@ export const getPosts = query({
     return Promise.all(
       posts.map(async post => {
         const author = await ctx.db.get(post.authorId)
+        const tagDocs = await Promise.all(
+          post.tags.map(tagId => ctx.db.get(tagId))
+        )
+        const tagNames = tagDocs.filter(Boolean).map(tag => tag!.name)
 
         return {
           ...post,
           author,
+          tagNames,
           ...(post.coverImageId
             ? {
                 coverImageUrl:
@@ -77,15 +82,33 @@ export const createPost = mutation({
     excerpt: v.string(),
     content: v.string(),
     coverImageId: v.optional(v.id('_storage')),
-    tags: v.array(v.id('tags'))
+    tags: v.array(v.string())
   },
   handler: async (ctx, args) => {
     const user = await getCurrentUserOrThrow(ctx)
 
+    // Get or create tags
+    const tagIds = await Promise.all(
+      args.tags.map(async (tagName) => {
+        const existingTag = await ctx.db
+          .query("tags")
+          .filter((q) => q.eq(q.field("name"), tagName.toLowerCase()))
+          .first();
+
+        if (existingTag) {
+          return existingTag._id;
+        }
+
+        const newTag = await ctx.db.insert("tags", { name: tagName.toLowerCase() });
+        return newTag;
+      })
+    );
+
     const data = {
       ...args,
       authorId: user._id,
-      likes: 0
+      likes: 0,
+      tags: tagIds
     }
 
     await ctx.db.insert('posts', data)

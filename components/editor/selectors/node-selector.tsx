@@ -41,7 +41,7 @@ const items: SelectorItem[] = [
     name: 'Heading 1',
     icon: Heading1,
     command: editor =>
-      editor?.chain().focus().clearNodes().toggleHeading({ level: 1 }).run(),
+      editor?.chain().focus().toggleHeading({ level: 1 }).run(),
     isActive: editor =>
       editor ? editor.isActive('heading', { level: 1 }) : false
   },
@@ -49,7 +49,7 @@ const items: SelectorItem[] = [
     name: 'Heading 2',
     icon: Heading2,
     command: editor =>
-      editor?.chain().focus().clearNodes().toggleHeading({ level: 2 }).run(),
+      editor?.chain().focus().toggleHeading({ level: 2 }).run(),
     isActive: editor =>
       editor ? editor.isActive('heading', { level: 2 }) : false
   },
@@ -57,7 +57,7 @@ const items: SelectorItem[] = [
     name: 'Heading 3',
     icon: Heading3,
     command: editor =>
-      editor?.chain().focus().clearNodes().toggleHeading({ level: 3 }).run(),
+      editor?.chain().focus().toggleHeading({ level: 3 }).run(),
     isActive: editor =>
       editor ? editor.isActive('heading', { level: 3 }) : false
   },

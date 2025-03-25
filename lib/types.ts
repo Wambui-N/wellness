@@ -22,4 +22,5 @@ export type Post = {
     email: string
     clerkUserId: string
   } | null
+  tagNames?: string[]
 }

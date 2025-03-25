@@ -6,6 +6,7 @@ import { combineName, formatDate } from '@/lib/utils'
 
 import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
 
 import { MessageSquare, Sparkle, ThumbsUp } from 'lucide-react'
 
@@ -35,7 +36,18 @@ export default function PostItem({ post }: { post: Post }) {
               <p className='text-sm text-muted-foreground'>{post.excerpt}</p>
             </div>
 
-            <div className='mt-7 flex items-center justify-between text-sm text-muted-foreground'>
+            {/* Tags */}
+            {post.tagNames && post.tagNames.length > 0 && (
+              <div className='mt-3 flex flex-wrap gap-2'>
+                {post.tagNames.map(tag => (
+                  <Badge key={tag} variant='secondary' className='font-light'>
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            )}
+
+            <div className='mt-4 flex items-center justify-between text-sm text-muted-foreground'>
               <div className='flex items-center gap-4'>
                 <Sparkle className='h-4 w-4 fill-yellow-500 text-yellow-500' />
                 <span>{formatDate(post._creationTime)}</span>

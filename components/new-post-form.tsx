@@ -11,7 +11,7 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { newPostSchema } from '@/lib/schemas'
 import { createSlugFromName } from '@/lib/utils'
 
-import { useMutation } from 'convex/react'
+import { useMutation, useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
 
@@ -21,14 +21,18 @@ import Editor from '@/components/editor/editor'
 import { Spinner } from '@/components/ui/spinner'
 import ImageUploader from '@/components/image-uploader'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
+import { Badge } from './ui/badge'
+import TagSelector from './tag-selector'
 
 type Inputs = z.infer<typeof newPostSchema>
 
 export default function NewPostForm() {
   const createPost = useMutation(api.posts.createPost)
+  const getTags = useQuery(api.tags.getTags)
   const router = useRouter()
 
   const [filePickerIsOpen, setFilePickerIsOpen] = useState(false)
+  const [selectedTags, setSelectedTags] = useState<string[]>([])
 
   const {
     watch,
@@ -38,7 +42,9 @@ export default function NewPostForm() {
     formState: { errors, isSubmitting }
   } = useForm<Inputs>({
     resolver: zodResolver(newPostSchema),
-    defaultValues: {}
+    defaultValues: {
+      tags: []
+    }
   })
 
   function setCoverImageId(url: string) {
@@ -76,7 +82,8 @@ export default function NewPostForm() {
       const postSlug = await createPost({
         ...data,
         coverImageId: data.coverImageId as Id<'_storage'> | undefined,
-        content: JSON.stringify(contentJson)
+        content: JSON.stringify(contentJson),
+        tags: selectedTags
       })
 
       if (!postSlug) throw new Error('Failed to create post')
@@ -87,6 +94,10 @@ export default function NewPostForm() {
       toast.error('Failed to create post')
     }
   }
+
+  // Get available tags from the database
+  const availableTags = getTags?.map(tag => tag.name) || []
+
   return (
     <form onSubmit={handleSubmit(processForm)}>
       <div className='flex flex-col gap-4'>
@@ -152,6 +163,17 @@ export default function NewPostForm() {
               {errors.excerpt.message}
             </p>
           )}
+        </div>
+
+        {/* Tags Section */}
+        <div>
+          <label className="text-sm font-medium">Select Tags</label>
+          <TagSelector
+            tags={availableTags}
+            value={selectedTags}
+            onChange={setSelectedTags}
+            error={errors.tags?.message}
+          />
         </div>
 
         {/* Content */}
