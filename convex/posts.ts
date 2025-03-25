@@ -1,6 +1,7 @@
 import { v } from 'convex/values'
 import { query, mutation } from './_generated/server'
 import { getCurrentUserOrThrow } from './users'
+import { Id } from './_generated/dataModel'
 
 export const generateUploadUrl = mutation(async ctx => {
   return await ctx.storage.generateUploadUrl()
@@ -117,24 +118,212 @@ export const createPost = mutation({
   }
 })
 
-export const likePost = mutation({
-  args: { slug: v.string() },
-  handler: async (ctx, { slug }) => {
-    const user = await getCurrentUserOrThrow(ctx)
-
-    const post = await ctx.db
+export const getUserPosts = query({
+  args: { userId: v.optional(v.id('users')) },
+  handler: async (ctx, args) => {
+    if (!args.userId) return []
+    const posts = await ctx.db
       .query('posts')
-      .withIndex('bySlug', q => q.eq('slug', slug))
-      .unique()
+      .filter((q) => 
+        q.and(
+          q.eq(q.field('authorId'), args.userId),
+          q.eq(q.field('status'), 'published')
+        )
+      )
+      .collect()
+    
+    return await Promise.all(posts.map(async (post) => {
+      const author = await ctx.db.get(post.authorId)
+      return { ...post, author }
+    }))
+  },
+})
 
-    if (!post) {
-      return null
+export const getSavedPosts = query({
+  args: { userId: v.optional(v.id('users')) },
+  handler: async (ctx, args) => {
+    if (!args.userId) return []
+    const user = await ctx.db.get(args.userId)
+    if (!user?.savedArticles) return []
+    
+    const posts = await Promise.all(
+      user.savedArticles.map(async (postId) => {
+        const post = await ctx.db.get(postId)
+        if (!post) return null
+        const author = await ctx.db.get(post.authorId)
+        return { ...post, author }
+      })
+    )
+    
+    return posts.filter((post): post is NonNullable<typeof post> => post !== null)
+  },
+})
+
+export const getLikedPosts = query({
+  args: { userId: v.optional(v.id('users')) },
+  handler: async (ctx, args) => {
+    if (!args.userId) return []
+    const user = await ctx.db.get(args.userId)
+    if (!user?.likedArticles) return []
+    
+    const posts = await Promise.all(
+      user.likedArticles.map(async (postId) => {
+        const post = await ctx.db.get(postId)
+        if (!post) return null
+        const author = await ctx.db.get(post.authorId)
+        return { ...post, author }
+      })
+    )
+    
+    return posts.filter((post): post is NonNullable<typeof post> => post !== null)
+  },
+})
+
+export const savePost = mutation({
+  args: { postId: v.id('posts') },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity()
+    if (!identity) throw new Error('Unauthorized')
+
+    const user = await ctx.db
+      .query('users')
+      .filter((q) => q.eq(q.field('clerkUserId'), identity.subject))
+      .first()
+    
+    if (!user) throw new Error('User not found')
+
+    const post = await ctx.db.get(args.postId)
+    if (!post) throw new Error('Post not found')
+
+    // Update user's saved articles
+    const savedArticles = user.savedArticles || []
+    if (!savedArticles.includes(args.postId)) {
+      await ctx.db.patch(user._id, {
+        savedArticles: [...savedArticles, args.postId]
+      })
     }
 
-    // if (post.authorId === user._id) {
-    //   return null
-    // }
+    // Update post's savedBy array
+    const savedBy = post.savedBy || []
+    if (!savedBy.includes(user._id)) {
+      await ctx.db.patch(args.postId, {
+        savedBy: [...savedBy, user._id]
+      })
+    }
+  },
+})
 
-    await ctx.db.patch(post._id, { likes: post.likes + 1 })
+export const unsavePost = mutation({
+  args: { postId: v.id('posts') },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity()
+    if (!identity) throw new Error('Unauthorized')
+
+    const user = await ctx.db
+      .query('users')
+      .filter((q) => q.eq(q.field('clerkUserId'), identity.subject))
+      .first()
+    
+    if (!user) throw new Error('User not found')
+
+    const post = await ctx.db.get(args.postId)
+    if (!post) throw new Error('Post not found')
+
+    // Update user's saved articles
+    const savedArticles = user.savedArticles || []
+    await ctx.db.patch(user._id, {
+      savedArticles: savedArticles.filter(id => id !== args.postId)
+    })
+
+    // Update post's savedBy array
+    const savedBy = post.savedBy || []
+    await ctx.db.patch(args.postId, {
+      savedBy: savedBy.filter(id => id !== user._id)
+    })
+  },
+})
+
+export const likePost = mutation({
+  args: { postId: v.id('posts') },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity()
+    if (!identity) throw new Error('Unauthorized')
+
+    const user = await ctx.db
+      .query('users')
+      .filter((q) => q.eq(q.field('clerkUserId'), identity.subject))
+      .first()
+    
+    if (!user) throw new Error('User not found')
+
+    const post = await ctx.db.get(args.postId)
+    if (!post) throw new Error('Post not found')
+
+    // Update user's liked articles
+    const likedArticles = user.likedArticles || []
+    if (!likedArticles.includes(args.postId)) {
+      await ctx.db.patch(user._id, {
+        likedArticles: [...likedArticles, args.postId]
+      })
+    }
+
+    // Update post's likedBy array and likes count
+    const likedBy = post.likedBy || []
+    if (!likedBy.includes(user._id)) {
+      await ctx.db.patch(args.postId, {
+        likedBy: [...likedBy, user._id],
+        likes: (post.likes || 0) + 1
+      })
+    }
+  },
+})
+
+export const unlikePost = mutation({
+  args: { postId: v.id('posts') },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity()
+    if (!identity) throw new Error('Unauthorized')
+
+    const user = await ctx.db
+      .query('users')
+      .filter((q) => q.eq(q.field('clerkUserId'), identity.subject))
+      .first()
+    
+    if (!user) throw new Error('User not found')
+
+    const post = await ctx.db.get(args.postId)
+    if (!post) throw new Error('Post not found')
+
+    // Update user's liked articles
+    const likedArticles = user.likedArticles || []
+    await ctx.db.patch(user._id, {
+      likedArticles: likedArticles.filter(id => id !== args.postId)
+    })
+
+    // Update post's likedBy array and likes count
+    const likedBy = post.likedBy || []
+    if (likedBy.includes(user._id)) {
+      await ctx.db.patch(args.postId, {
+        likedBy: likedBy.filter(id => id !== user._id),
+        likes: Math.max(0, (post.likes || 0) - 1)
+      })
+    }
+  },
+})
+
+export const migratePostsStatus = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const posts = await ctx.db.query('posts').collect()
+    
+    for (const post of posts) {
+      if (!post.status) {
+        await ctx.db.patch(post._id, {
+          status: 'published' // Default all existing posts to published
+        })
+      }
+    }
+    
+    return posts.length
   }
 })

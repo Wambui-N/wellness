@@ -2,15 +2,18 @@
 
 import { useQuery, useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
+import { useUser } from '@clerk/nextjs'
 
 import { combineName, formatDate } from '@/lib/utils'
 
 import Editor from '@/components/editor/editor'
 import { Spinner } from '@/components/ui/spinner'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
 
 import {
   Bookmark,
+  BookmarkCheck,
   Ellipsis,
   MessageSquare,
   Share,
@@ -19,8 +22,16 @@ import {
 import { notFound } from 'next/navigation'
 
 export default function Post({ slug }: { slug: string }) {
+  const { user } = useUser()
   const post = useQuery(api.posts.getPostBySlug, { slug })
+  const userData = useQuery(api.users.getUserByClerkId, { 
+    clerkUserId: user?.id ?? '' 
+  })
+  
   const likePost = useMutation(api.posts.likePost)
+  const unlikePost = useMutation(api.posts.unlikePost)
+  const savePost = useMutation(api.posts.savePost)
+  const unsavePost = useMutation(api.posts.unsavePost)
 
   if (post === null) {
     notFound()
@@ -34,6 +45,27 @@ export default function Post({ slug }: { slug: string }) {
         </div>
       </section>
     )
+  }
+
+  const isLiked = userData && post.likedBy?.includes(userData._id)
+  const isSaved = userData && post.savedBy?.includes(userData._id)
+
+  const handleLike = async () => {
+    if (!userData) return
+    if (isLiked) {
+      await unlikePost({ postId: post._id })
+    } else {
+      await likePost({ postId: post._id })
+    }
+  }
+
+  const handleSave = async () => {
+    if (!userData) return
+    if (isSaved) {
+      await unsavePost({ postId: post._id })
+    } else {
+      await savePost({ postId: post._id })
+    }
   }
 
   return (
@@ -62,31 +94,58 @@ export default function Post({ slug }: { slug: string }) {
         {/* Metadata */}
         <div className='mt-6 flex w-full items-center justify-between border-b border-t px-4 py-3'>
           <div className='flex items-center space-x-6'>
-            <button
-              className='flex items-center gap-2 font-light text-muted-foreground hover:text-foreground'
-              onClick={async () => await likePost({ slug: post.slug })}
+            <Button
+              variant="ghost"
+              size="sm"
+              className={`flex items-center gap-2 font-light ${
+                isLiked ? 'text-primary' : 'text-muted-foreground'
+              } hover:text-foreground`}
+              onClick={handleLike}
             >
               <ThumbsUp className='size-5' strokeWidth={1.5} />
               <span>{post.likes}</span>
-            </button>
+            </Button>
 
-            <button className='flex items-center gap-2 font-light text-muted-foreground hover:text-foreground'>
+            <Button
+              variant="ghost"
+              size="sm"
+              className='flex items-center gap-2 font-light text-muted-foreground hover:text-foreground'
+            >
               <MessageSquare className='size-5' strokeWidth={1.5} />
               <span>28</span>
-            </button>
+            </Button>
           </div>
 
           <div className='flex items-center space-x-4'>
-            <button className='font-light text-muted-foreground hover:text-foreground'>
-              <Bookmark className='size-5' strokeWidth={1.5} />
-            </button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className={`flex items-center gap-2 font-light ${
+                isSaved ? 'text-primary' : 'text-muted-foreground'
+              } hover:text-foreground`}
+              onClick={handleSave}
+            >
+              {isSaved ? (
+                <BookmarkCheck className='size-5' strokeWidth={1.5} />
+              ) : (
+                <Bookmark className='size-5' strokeWidth={1.5} />
+              )}
+            </Button>
 
-            <button className='font-light text-muted-foreground hover:text-foreground'>
+            <Button
+              variant="ghost"
+              size="sm"
+              className='flex items-center gap-2 font-light text-muted-foreground hover:text-foreground'
+            >
               <Share className='size-5' strokeWidth={1.5} />
-            </button>
-            <button className='font-light text-muted-foreground hover:text-foreground'>
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className='flex items-center gap-2 font-light text-muted-foreground hover:text-foreground'
+            >
               <Ellipsis className='size-5' strokeWidth={1.5} />
-            </button>
+            </Button>
           </div>
         </div>
 

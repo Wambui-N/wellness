@@ -1,6 +1,7 @@
 import { UserJSON } from '@clerk/backend'
 import { v, Validator } from 'convex/values'
 import { internalMutation, query, QueryCtx } from './_generated/server'
+import { Id } from './_generated/dataModel'
 
 export const getUsers = query({
   args: {},
@@ -59,10 +60,17 @@ export const deleteFromClerk = internalMutation({
   }
 })
 
-export async function getCurrentUserOrThrow(ctx: QueryCtx) {
-  const userRecord = await getCurrentUser(ctx)
-  if (!userRecord) throw new Error("Can't get current user")
-  return userRecord
+export const getCurrentUserOrThrow = async (ctx: any) => {
+  const identity = await ctx.auth.getUserIdentity()
+  if (!identity) throw new Error('Unauthorized')
+
+  const user = await ctx.db
+    .query('users')
+    .withIndex('byClerkUserId', q => q.eq('clerkUserId', identity.subject))
+    .first()
+
+  if (!user) throw new Error('User not found')
+  return user
 }
 
 export async function getCurrentUser(ctx: QueryCtx) {

@@ -8,7 +8,9 @@ export default defineSchema({
     firstName: v.optional(v.string()),
     lastName: v.optional(v.string()),
     imageUrl: v.optional(v.string()),
-    posts: v.optional(v.array(v.id('posts')))
+    posts: v.optional(v.array(v.id('posts'))),
+    savedArticles: v.optional(v.array(v.id('posts'))),
+    likedArticles: v.optional(v.array(v.id('posts')))
   }).index('byClerkUserId', ['clerkUserId']),
 
   posts: defineTable({
@@ -19,7 +21,10 @@ export default defineSchema({
     coverImageId: v.optional(v.id('_storage')),
     authorId: v.id('users'),
     likes: v.number(),
-    tags: v.array(v.id('tags')) 
+    tags: v.array(v.id('tags')),
+    status: v.optional(v.union(v.literal('draft'), v.literal('published'))),
+    savedBy: v.optional(v.array(v.id('users'))),
+    likedBy: v.optional(v.array(v.id('users')))
   }).index('bySlug', ['slug']),
 
   tags: defineTable({
