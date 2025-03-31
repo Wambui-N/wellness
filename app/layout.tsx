@@ -3,6 +3,7 @@ import localFont from 'next/font/local'
 import { Inter, Playfair_Display } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import { cn } from '@/lib/utils'
+import { Toaster } from "@/components/ui/toaster"
 
 import Providers from '@/components/providers'
 import Header from '@/components/header'
@@ -53,6 +54,7 @@ export default function RootLayout({
             <main className='grow'>{children}</main>
             <Footer />
           </Providers>
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>

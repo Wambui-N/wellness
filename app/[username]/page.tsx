@@ -7,13 +7,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import PostItem from '@/components/post-item'
 import { useParams } from 'next/navigation'
+import { Spinner } from '@/components/ui/spinner'
+import { Id } from '@/convex/_generated/dataModel'
+import { Doc } from '@/convex/_generated/dataModel'
 
 export default function ProfilePage() {
   const { username } = useParams()
   const { user } = useUser()
   const userData = useQuery(api.users.current)
+  const profileUser = useQuery(api.users.getUserByUsername, { username: username as string })
+  
   const userPosts = useQuery(api.posts.getUserPosts, { 
-    userId: userData?._id 
+    userId: profileUser?._id 
   })
   const savedPosts = useQuery(api.posts.getSavedPosts, { 
     userId: userData?._id 
@@ -22,29 +27,33 @@ export default function ProfilePage() {
     userId: userData?._id 
   })
 
-  if (!user || !userData) {
-    return <div>Loading...</div>
-  }
-
   // Check if the current user is viewing their own profile
-  const isOwnProfile = userData.firstName && userData.lastName && 
+  const isOwnProfile = userData?.firstName && userData?.lastName && 
     `${userData.firstName.toLowerCase()}-${userData.lastName.toLowerCase()}` === username
+
+  if (!profileUser) {
+    return (
+      <div className="container mx-auto py-24 flex justify-center">
+        <Spinner size="lg" />
+      </div>
+    )
+  }
 
   return (
     <div className="container mx-auto py-24">
       <div className="flex items-center gap-4 mb-8">
-        {userData.imageUrl && (
+        {profileUser.imageUrl && (
           <img 
-            src={userData.imageUrl} 
-            alt={userData.firstName ?? ''} 
+            src={profileUser.imageUrl} 
+            alt={profileUser.firstName ?? ''} 
             className="w-20 h-20 rounded-full"
           />
         )}
         <div>
           <h1 className="text-2xl font-bold">
-            {userData.firstName} {userData.lastName}
+            {profileUser.firstName} {profileUser.lastName}
           </h1>
-          <p className="text-gray-600">{userData.email}</p>
+          <p className="text-gray-600">{profileUser.email}</p>
         </div>
       </div>
 
@@ -87,8 +96,6 @@ export default function ProfilePage() {
           </>
         )}
       </Tabs>
-
-      {/* <PostItem key={post._id} post={post} /> */}
     </div>
   )
 } 

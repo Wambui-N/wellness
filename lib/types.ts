@@ -1,6 +1,7 @@
 import { Id } from '@/convex/_generated/dataModel'
 
 export type Post = {
+  savedBy: any
   _id: Id<'posts'>
   _creationTime: number
   coverImageId?: string

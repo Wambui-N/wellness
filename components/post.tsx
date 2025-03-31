@@ -3,6 +3,7 @@
 import { useQuery, useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { useUser } from '@clerk/nextjs'
+import { toast } from '@/components/ui/use-toast'
 
 import { combineName, formatDate } from '@/lib/utils'
 
@@ -10,6 +11,7 @@ import Editor from '@/components/editor/editor'
 import { Spinner } from '@/components/ui/spinner'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
+import CommentsSection from '@/components/comments/comments-section'
 
 import {
   Bookmark,
@@ -24,8 +26,9 @@ import { notFound } from 'next/navigation'
 export default function Post({ slug }: { slug: string }) {
   const { user } = useUser()
   const post = useQuery(api.posts.getPostBySlug, { slug })
-  const userData = useQuery(api.users.getUserByClerkId, { 
-    clerkUserId: user?.id ?? '' 
+  const userData = useQuery(api.users.current)
+  const commentCount = useQuery(api.comments.getCommentsCount, { 
+    postId: post?._id 
   })
   
   const likePost = useMutation(api.posts.likePost)
@@ -51,11 +54,28 @@ export default function Post({ slug }: { slug: string }) {
   const isSaved = userData && post.savedBy?.includes(userData._id)
 
   const handleLike = async () => {
-    if (!userData) return
-    if (isLiked) {
-      await unlikePost({ postId: post._id })
-    } else {
-      await likePost({ postId: post._id })
+    if (!userData) {
+      toast({
+        title: 'Please sign in',
+        description: 'You need to be signed in to like posts.',
+        variant: 'destructive'
+      })
+      return
+    }
+
+    try {
+      if (isLiked) {
+        await unlikePost({ postId: post._id })
+      } else {
+        await likePost({ postId: post._id })
+      }
+    } catch (error) {
+      console.error('Failed to like post:', error)
+      toast({
+        title: 'Error',
+        description: 'Failed to like post. Please try again.',
+        variant: 'destructive'
+      })
     }
   }
 
@@ -92,7 +112,7 @@ export default function Post({ slug }: { slug: string }) {
         </div>
 
         {/* Metadata */}
-        <div className='mt-6 flex w-full items-center justify-between border-b border-t px-4 py-3'>
+        <div className='mt-6 flex items-center justify-between'>
           <div className='flex items-center space-x-6'>
             <Button
               variant="ghost"
@@ -112,11 +132,11 @@ export default function Post({ slug }: { slug: string }) {
               className='flex items-center gap-2 font-light text-muted-foreground hover:text-foreground'
             >
               <MessageSquare className='size-5' strokeWidth={1.5} />
-              <span>28</span>
+              <span>{commentCount ?? 0}</span>
             </Button>
           </div>
 
-          <div className='flex items-center space-x-4'>
+          <div className='flex items-center gap-2'>
             <Button
               variant="ghost"
               size="sm"
@@ -159,6 +179,12 @@ export default function Post({ slug }: { slug: string }) {
         {/* Content */}
         <div className='mt-10'>
           <Editor post={post} editable={false} />
+        </div>
+
+        {/* Comments */}
+        <div className='mt-16 border-t pt-8'>
+          <h2 className='mb-8 text-2xl font-bold'>Comments</h2>
+          <CommentsSection postId={post._id} />
         </div>
       </div>
     </section>

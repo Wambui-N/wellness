@@ -81,9 +81,29 @@ export async function getCurrentUser(ctx: QueryCtx) {
   return await userByClerkUserId(ctx, identity.subject)
 }
 
-async function userByClerkUserId(ctx: QueryCtx, clerkUserId: string) {
+export async function userByClerkUserId(ctx: QueryCtx, clerkUserId: string) {
   return await ctx.db
     .query('users')
     .withIndex('byClerkUserId', q => q.eq('clerkUserId', clerkUserId))
     .unique()
 }
+
+export const getUserByUsername = query({
+  args: { username: v.string() },
+  handler: async (ctx, { username }) => {
+    const [firstName, lastName] = username.split('-')
+    if (!firstName || !lastName) return null
+
+    const user = await ctx.db
+      .query('users')
+      .filter((q) => 
+        q.and(
+          q.eq(q.field('firstName'), firstName),
+          q.eq(q.field('lastName'), lastName)
+        )
+      )
+      .first()
+
+    return user
+  }
+})

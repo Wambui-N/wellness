@@ -39,7 +39,7 @@ export default function Posts({ selectedTag }: PostsProps) {
   }
 
   return (
-    <ul>
+    <ul className="divide-y">
       {filteredPosts.map(post => (
         <PostItem key={post._id} post={post} />
       ))}

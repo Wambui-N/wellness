@@ -1,16 +1,54 @@
 import Link from 'next/link'
 import Image from 'next/image'
-
+import { useQuery, useMutation } from 'convex/react'
+import { api } from '@/convex/_generated/api'
 import { Post } from '@/lib/types'
 import { combineName, formatDate } from '@/lib/utils'
+import { useUser } from '@clerk/nextjs'
+import { useToast } from '@/components/ui/use-toast'
 
 import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 
-import { MessageSquare, Sparkle, ThumbsUp } from 'lucide-react'
+import { Bookmark, BookmarkCheck, Sparkle, ThumbsUp } from 'lucide-react'
 
 export default function PostItem({ post }: { post: Post }) {
+  const { user } = useUser()
+  const { toast } = useToast()
+  const userData = useQuery(api.users.current)
+  const savePost = useMutation(api.posts.savePost)
+  const unsavePost = useMutation(api.posts.unsavePost)
+
+  const isSaved = userData && post.savedBy?.includes(userData._id)
+
+  const handleSave = async (e: React.MouseEvent) => {
+    e.preventDefault() // Prevent navigation when clicking the save button
+    if (!userData) {
+      toast({
+        title: 'Please sign in',
+        description: 'You need to be signed in to save posts.',
+        variant: 'destructive'
+      })
+      return
+    }
+
+    try {
+      if (isSaved) {
+        await unsavePost({ postId: post._id })
+      } else {
+        await savePost({ postId: post._id })
+      }
+    } catch (error) {
+      console.error('Failed to save post:', error)
+      toast({
+        title: 'Error',
+        description: 'Failed to save post. Please try again.',
+        variant: 'destructive'
+      })
+    }
+  }
+
   return (
     <li className='mb-4 pb-10 pt-5 sm:border-b'>
       <Link href={`/posts/${post.slug}`} className='block'>
@@ -28,7 +66,7 @@ export default function PostItem({ post }: { post: Post }) {
           </div>
         </div>
 
-        <div className='mt-2 flex flex-col-reverse gap-x-10 sm:mt-4 sm:flex-row sm:items-center'>
+        <div className='mt-4 flex flex-col-reverse items-start gap-4 sm:flex-row sm:items-center'>
           {/* Post details */}
           <div className='mt-4 w-full sm:mt-0 sm:w-3/4'>
             <div className='space-y-1'>
@@ -56,10 +94,18 @@ export default function PostItem({ post }: { post: Post }) {
                   <ThumbsUp className='h-4 w-4' />
                   <span>{post.likes}</span>
                 </div>
-                <div className='flex items-center gap-2'>
-                  <MessageSquare className='h-4 w-4' />
-                  <span>28</span>
-                </div>
+                <button
+                  onClick={handleSave}
+                  className={`flex items-center gap-2 hover:text-foreground ${
+                    isSaved ? 'text-primary' : ''
+                  }`}
+                >
+                  {isSaved ? (
+                    <BookmarkCheck className='h-4 w-4' />
+                  ) : (
+                    <Bookmark className='h-4 w-4' />
+                  )}
+                </button>
               </div>
             </div>
           </div>

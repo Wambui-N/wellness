@@ -8,32 +8,38 @@ export const generateUploadUrl = mutation(async ctx => {
 })
 
 export const getPosts = query({
-  args: {},
-  handler: async ctx => {
-    const posts = await ctx.db.query('posts').order('desc').collect()
-    return Promise.all(
-      posts.map(async post => {
-        const author = await ctx.db.get(post.authorId)
+  handler: async (ctx) => {
+    const posts = await ctx.db
+      .query("posts")
+      .order("desc")
+      .collect();
+
+    return await Promise.all(
+      posts.map(async (post) => {
+        const author = await ctx.db.get(post.authorId);
         const tagDocs = await Promise.all(
           post.tags.map(tagId => ctx.db.get(tagId))
-        )
-        const tagNames = tagDocs.filter(Boolean).map(tag => tag!.name)
+        );
+        const tagNames = tagDocs.filter(Boolean).map(tag => tag!.name);
 
         return {
           ...post,
           author,
           tagNames,
+          savedBy: post.savedBy || [],
+          likedBy: post.likedBy || [],
+          likes: post.likes || 0,
           ...(post.coverImageId
             ? {
                 coverImageUrl:
                   (await ctx.storage.getUrl(post.coverImageId)) ?? ''
               }
             : {})
-        }
+        };
       })
-    )
-  }
-})
+    );
+  },
+});
 
 export const getRecentPosts = query({
   args: {},
@@ -119,65 +125,109 @@ export const createPost = mutation({
 })
 
 export const getUserPosts = query({
-  args: { userId: v.optional(v.id('users')) },
+  args: { userId: v.optional(v.id("users")) },
   handler: async (ctx, args) => {
-    if (!args.userId) return []
-    const posts = await ctx.db
-      .query('posts')
-      .filter((q) => 
-        q.and(
-          q.eq(q.field('authorId'), args.userId),
-          q.eq(q.field('status'), 'published')
-        )
-      )
-      .collect()
+    if (!args.userId) return [];
     
-    return await Promise.all(posts.map(async (post) => {
-      const author = await ctx.db.get(post.authorId)
-      return { ...post, author }
-    }))
+    const posts = await ctx.db
+      .query("posts")
+      .filter((q) => q.eq(q.field("authorId"), args.userId))
+      .collect();
+
+    // Get all posts with their complete data including savedBy
+    const postsWithData = await Promise.all(
+      posts.map(async (post) => {
+        const author = await ctx.db.get(post.authorId);
+        return {
+          ...post,
+          author,
+          savedBy: post.savedBy || [],
+          likedBy: post.likedBy || [],
+        };
+      })
+    );
+
+    return postsWithData;
   },
-})
+});
 
 export const getSavedPosts = query({
-  args: { userId: v.optional(v.id('users')) },
+  args: { userId: v.optional(v.id("users")) },
   handler: async (ctx, args) => {
-    if (!args.userId) return []
-    const user = await ctx.db.get(args.userId)
-    if (!user?.savedArticles) return []
+    if (!args.userId) return [];
     
+    const user = await ctx.db.get(args.userId);
+    if (!user?.savedArticles) return [];
+
     const posts = await Promise.all(
       user.savedArticles.map(async (postId) => {
-        const post = await ctx.db.get(postId)
-        if (!post) return null
-        const author = await ctx.db.get(post.authorId)
-        return { ...post, author }
+        const post = await ctx.db.get(postId);
+        if (!post) return null;
+        const author = await ctx.db.get(post.authorId);
+        const tagDocs = await Promise.all(
+          post.tags.map(tagId => ctx.db.get(tagId))
+        );
+        const tagNames = tagDocs.filter(Boolean).map(tag => tag!.name);
+
+        return {
+          ...post,
+          author,
+          tagNames,
+          savedBy: post.savedBy || [],
+          likedBy: post.likedBy || [],
+          likes: post.likes || 0,
+          ...(post.coverImageId
+            ? {
+                coverImageUrl:
+                  (await ctx.storage.getUrl(post.coverImageId)) ?? ''
+              }
+            : {})
+        };
       })
-    )
-    
-    return posts.filter((post): post is NonNullable<typeof post> => post !== null)
+    );
+
+    return posts.filter((post): post is NonNullable<typeof post> => post !== null);
   },
-})
+});
 
 export const getLikedPosts = query({
-  args: { userId: v.optional(v.id('users')) },
+  args: { userId: v.optional(v.id("users")) },
   handler: async (ctx, args) => {
-    if (!args.userId) return []
-    const user = await ctx.db.get(args.userId)
-    if (!user?.likedArticles) return []
+    if (!args.userId) return [];
     
+    const user = await ctx.db.get(args.userId);
+    if (!user?.likedArticles) return [];
+
     const posts = await Promise.all(
       user.likedArticles.map(async (postId) => {
-        const post = await ctx.db.get(postId)
-        if (!post) return null
-        const author = await ctx.db.get(post.authorId)
-        return { ...post, author }
+        const post = await ctx.db.get(postId);
+        if (!post) return null;
+        const author = await ctx.db.get(post.authorId);
+        const tagDocs = await Promise.all(
+          post.tags.map(tagId => ctx.db.get(tagId))
+        );
+        const tagNames = tagDocs.filter(Boolean).map(tag => tag!.name);
+
+        return {
+          ...post,
+          author,
+          tagNames,
+          savedBy: post.savedBy || [],
+          likedBy: post.likedBy || [],
+          likes: post.likes || 0,
+          ...(post.coverImageId
+            ? {
+                coverImageUrl:
+                  (await ctx.storage.getUrl(post.coverImageId)) ?? ''
+              }
+            : {})
+        };
       })
-    )
-    
-    return posts.filter((post): post is NonNullable<typeof post> => post !== null)
+    );
+
+    return posts.filter((post): post is NonNullable<typeof post> => post !== null);
   },
-})
+});
 
 export const savePost = mutation({
   args: { postId: v.id('posts') },
