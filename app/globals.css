@@ -64,7 +64,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background font-sans text-foreground;
+    @apply bg-white font-sans text-foreground;
   }
 }
 
@@ -144,4 +144,11 @@ pre {
   .hljs-strong {
     font-weight: 700;
   }
+}
+
+.hero-bg {
+  background-image: url('/hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }

@@ -27,7 +27,7 @@ export default function Header() {
     : '/profile'
 
   return (
-    <header className='fixed inset-x-0 top-0 z-50 border-b bg-background/20 py-4 backdrop-blur-sm'>
+    <header className='fixed inset-x-0 top-0 z-50  bg-background/0 py-4 backdrop-blur-sm'>
       <nav className='container flex max-w-none items-center justify-between'>
         <Sheet>
           <SheetTrigger className='sm:hidden'>
@@ -50,6 +50,13 @@ export default function Header() {
                   </SheetClose>
                 </li>
               </SignedIn>
+              <SignedOut>
+                <li>
+                  <SheetClose asChild>
+                    <Link href='/about'>About</Link>
+                  </SheetClose>
+                </li>
+              </SignedOut>
             </ul>
           </SheetContent>
         </Sheet>
@@ -66,6 +73,11 @@ export default function Header() {
               </Link>
             </li>
           </SignedIn>
+          <SignedOut>
+            <li>
+              <Link href='/about'>About</Link>
+            </li>
+          </SignedOut>
         </ul>
 
         <div className='flex items-center justify-between gap-6'>

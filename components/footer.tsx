@@ -1,22 +1,20 @@
-import Link from 'next/link'
+import React from 'react'
 
-export default function Footer() {
+const footer = () => {
   return (
-    <footer className='border-t py-4'>
-      <div className='container flex max-w-none flex-col items-center justify-between gap-x-3 gap-y-1 text-center text-xs text-muted-foreground sm:flex-row'>
-        <p>Bridge &copy;{new Date().getFullYear()}. All rights reserved.</p>
-        <p className='text-xs'>
-          Developed by{' '}
-          <Link
-            target='_blank'
-            rel='noopener noreferrer'
-            className='text-primary transition-colors hover:text-accent-foreground'
-            href='https://www.hamedbahram.io/'
-          >
-            Studio H
-          </Link>
-        </p>
-      </div>
+    <footer className='bg-[#020c12] p-6 mt-6'>
+        <div className='responsive flex flex-col items-center justify-between'>
+            <div className='flex flex-col items-center space-y-4'>
+            <h1 className='text-white text-2xl'>Wellness Dialogues</h1>
+            <p className='text-white text-sm'>© 2023 Wellness Dialogues. All rights reserved.</p>
+            </div>
+            <div className='flex space-x-4'>
+            <a href='#' className='text-white text-sm'>Privacy Policy</a>
+            <a href='#' className='text-white text-sm'>Terms of Service</a>
+            </div>
+        </div>
     </footer>
   )
 }
+
+export default footer

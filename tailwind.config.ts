@@ -17,6 +17,9 @@ const config: Config = {
       }
     },
     extend: {
+      backgroundImage: {
+        'hero-bg': "url('/Hero bg.png')"
+      },
       fontFamily: {
         sans: ['var(--font-sans)', ...fontFamily.sans],
         serif: ['var(--font-serif)', ...fontFamily.serif],
@@ -24,6 +27,10 @@ const config: Config = {
         'geist-mono': ['var(--font-geist-mono)', ...fontFamily.mono]
       },
       colors: {
+        black: "#020C12",
+        white: "#F5F5F5",
+        primary: "#81c4ee",
+        orange: "#FF7F11",
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
@@ -34,10 +41,10 @@ const config: Config = {
           DEFAULT: 'hsl(var(--popover))',
           foreground: 'hsl(var(--popover-foreground))'
         },
-        primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))'
-        },
+        // primary: {
+        //   DEFAULT: 'hsl(var(--primary))',
+        //   foreground: 'hsl(var(--primary-foreground))'
+        // },
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))'
