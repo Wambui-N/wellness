@@ -6,6 +6,8 @@
   :root {
     --font-gloria: 'var(--font-gloria)';
     --font-satoshi: 'var(--font-satoshi)';
+    
+    /* HSL values with proper formatting */
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
@@ -31,6 +33,9 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    --glass-bg: 0 0% 100% / 0.05;
+    --glass-border: 0 0% 100% / 0.1;
+    --glass-text: 0 0% 100% / 0.9;
   }
 
   .dark {
@@ -58,6 +63,9 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --glass-bg: 0 0% 0% / 0.85;
+    --glass-border: 0 0% 100% / 0.2;
+    --glass-text: 0 0% 100%;
   }
 }
 
@@ -66,7 +74,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-white font-satoshi text-foreground;
+    @apply bg-background font-satoshi text-foreground;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-gloria;
@@ -81,6 +89,22 @@
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+  
+  .glass-card {
+    @apply bg-[hsl(var(--glass-bg))] backdrop-blur-md border-[hsl(var(--glass-border))] shadow-2xl;
+  }
+  
+  .glass-text {
+    @apply text-[hsl(var(--glass-text))];
+  }
+  
+  .glass-text-muted {
+    @apply text-[hsl(var(--glass-text)/0.8)];
+  }
+  
+  .glass-ring {
+    @apply ring-1 ring-[hsl(var(--glass-border))];
   }
 }
 

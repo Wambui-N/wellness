@@ -28,11 +28,11 @@ export default function Header() {
     : '/profile'
 
   return (
-    <header className='fixed inset-x-0 top-0 z-50 bg-background/0 py-4 backdrop-blur-md'>
+    <header className='fixed inset-x-0 top-0 z-50 bg-[hsl(var(--glass-bg))] py-4 backdrop-blur-md border-b border-[hsl(var(--glass-border))]'>
       <nav className='container flex max-w-none items-center justify-between'>
         <Link 
           href='/' 
-          className='flex items-center gap-2 font-serif text-xl font-semibold text-foreground hover:text-primary transition-colors'
+          className='flex items-center gap-2 font-serif text-xl font-semibold glass-text hover:opacity-90 transition-all'
         >
           <Image 
             src="/WD Dark Logo.png" 
@@ -50,7 +50,7 @@ export default function Header() {
               size='sm' 
               variant='outline' 
               asChild 
-              className="flex items-center gap-2 hover:bg-primary/10 hover:text-primary border-border/40"
+              className="flex items-center gap-2 bg-white/5 border-[hsl(var(--glass-border))] glass-text hover:bg-white/10"
             >
               <Link href='/write'>
                 <Pencil className="h-4 w-4" />
@@ -62,7 +62,7 @@ export default function Header() {
           <SignedOut>
             <Link 
               href='/about' 
-              className="text-sm text-muted-foreground hover:text-primary transition-colors"
+              className="text-sm glass-text-muted hover:glass-text transition-colors"
             >
               About
             </Link>
@@ -71,7 +71,7 @@ export default function Header() {
           <SignedIn>
             <Link 
               href={profileUrl} 
-              className="flex items-center rounded-full ring-1 ring-border/40 p-1 hover:ring-primary/50 transition-all"
+              className="flex items-center rounded-full glass-ring p-1 hover:ring-white/30 transition-all"
             >
               {userData?.imageUrl ? (
                 <Image 
@@ -82,7 +82,7 @@ export default function Header() {
                   className="h-8 w-8 rounded-full object-cover"
                 />
               ) : (
-                <User className='h-6 w-6 text-muted-foreground' />
+                <User className='h-6 w-6 glass-text-muted' />
               )}
             </Link>
           </SignedIn>
@@ -92,7 +92,7 @@ export default function Header() {
               <Button 
                 size='sm' 
                 variant='outline'
-                className="hover:bg-primary/10 hover:text-primary border-border/40"
+                className="bg-white/5 border-[hsl(var(--glass-border))] glass-text hover:bg-white/10"
               >
                 Sign in
               </Button>

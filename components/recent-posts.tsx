@@ -23,9 +23,9 @@ export default function RecentPosts() {
   }
 
   return (
-    <Card className='flex-1 bg-black/80 backdrop-blur-md border-white/20 shadow-2xl'>
+    <Card className='flex-1 glass-card'>
       <CardHeader>
-        <CardTitle className='text-white'>Staff picks</CardTitle>
+        <CardTitle className='glass-text'>Staff picks</CardTitle>
       </CardHeader>
 
       <CardContent>
@@ -39,21 +39,21 @@ export default function RecentPosts() {
                 className='block px-4 py-2 rounded-lg transition-colors hover:bg-white/10'
               >
                 <div className='inline-flex items-end gap-2'>
-                  <Avatar className='size-5 ring-1 ring-white/20'>
+                  <Avatar className='size-5 glass-ring'>
                     <AvatarImage
                       src={post.author?.imageUrl}
                       alt={combineName(post.author)}
                     />
-                    <AvatarFallback className='bg-white/20 text-white'>
+                    <AvatarFallback className='bg-white/20 glass-text'>
                       {post.author?.firstName?.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
 
-                  <h2 className='text-xs leading-3 text-white/80'>
+                  <h2 className='text-xs leading-3 glass-text-muted'>
                     {combineName(post.author)}
                   </h2>
                 </div>
-                <h3 className='text-sm font-semibold text-white'>{post.title}</h3>
+                <h3 className='text-sm font-semibold glass-text'>{post.title}</h3>
               </Link>
             </li>
           ))}
@@ -61,7 +61,7 @@ export default function RecentPosts() {
       </CardContent>
 
       <CardFooter>
-        <Link href='/' className='text-sm font-light text-white/80 hover:text-white transition-colors'>
+        <Link href='/' className='text-sm font-light glass-text-muted hover:glass-text transition-colors'>
           See the full list
         </Link>
       </CardFooter>

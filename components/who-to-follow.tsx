@@ -26,9 +26,9 @@ export default function WhoToFollow() {
   }
 
   return (
-    <Card className='flex-1 bg-black/80 backdrop-blur-md border-white/20 shadow-2xl'>
+    <Card className='flex-1 glass-card'>
       <CardHeader>
-        <CardTitle className='text-white'>Favorite Authors</CardTitle>
+        <CardTitle className='glass-text'>Favorite Authors</CardTitle>
       </CardHeader>
 
       <CardContent>
@@ -38,21 +38,21 @@ export default function WhoToFollow() {
           {users?.map(user => (
             <li key={user._id} className='flex items-center justify-between'>
               <div className='inline-flex items-center gap-2'>
-                <Avatar className='size-5 ring-1 ring-white/20'>
+                <Avatar className='size-5 glass-ring'>
                   <AvatarImage src={user?.imageUrl} alt={combineName(user)} />
-                  <AvatarFallback className='bg-white/20 text-white'>
+                  <AvatarFallback className='bg-white/20 glass-text'>
                     {user?.firstName?.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
 
-                <h2 className='text-xs font-medium text-white'>{combineName(user)}</h2>
+                <h2 className='text-xs font-medium glass-text'>{combineName(user)}</h2>
               </div>
 
               <Button
                 size='sm'
                 variant='outline'
                 asChild
-                className='rounded-full font-light bg-white/10 border-white/20 text-white hover:bg-white/20'
+                className='rounded-full font-light bg-white/10 border-white/20 glass-text hover:bg-white/20'
               >
                 <Link href={`/${user.firstName?.toLowerCase() || 'user'}-${user.lastName?.toLowerCase() || 'profile'}`}>
                   Read Posts
@@ -64,7 +64,7 @@ export default function WhoToFollow() {
       </CardContent>
 
       <CardFooter>
-        <Link href='/authors' className='text-sm font-light text-white/80 hover:text-white transition-colors'>
+        <Link href='/authors' className='text-sm font-light glass-text-muted hover:glass-text transition-colors'>
           View all authors
         </Link>
       </CardFooter>
