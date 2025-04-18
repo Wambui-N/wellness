@@ -29,7 +29,7 @@ export default function Post({ slug }: { slug: string }) {
   const userData = useQuery(api.users.current)
   const commentCount = useQuery(api.comments.getCommentsCount, { 
     postId: post?._id 
-  })
+  }, { enabled: !!post?._id })
   
   const likePost = useMutation(api.posts.likePost)
   const unlikePost = useMutation(api.posts.unlikePost)
