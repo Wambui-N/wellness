@@ -72,7 +72,7 @@ export function WhatWeArent() {
             <span className="bg-gradient-to-r from-[#FF7F11] to-[#81c4ee] bg-clip-text text-transparent">Are Not</span>
           </h2>
           <p className="mt-4 text-[#020C12]/70 max-w-2xl mx-auto">
-            It's important to understand what our platform is not, to set the right expectations.
+            It&apos;s important to understand what our platform is not, to set the right expectations.
           </p>
         </motion.div>
 

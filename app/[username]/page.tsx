@@ -14,6 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Camera, LogOut } from 'lucide-react'
 import { useState } from 'react'
 import { SignOutButton } from '@clerk/nextjs'
+import Image from 'next/image'
 
 export default function ProfilePage() {
   const { username } = useParams()
@@ -80,10 +81,12 @@ export default function ProfilePage() {
         <div className="flex items-center gap-4">
           <div className="relative">
             {profileUser.imageUrl && (
-              <img 
+              <Image 
                 src={profileUser.imageUrl} 
                 alt={profileUser.firstName ?? ''} 
-                className="w-20 h-20 rounded-full"
+                width={80}
+                height={80}
+                className="rounded-full"
               />
             )}
             {isOwnProfile && (

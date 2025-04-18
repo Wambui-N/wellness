@@ -4,6 +4,8 @@
 
 @layer base {
   :root {
+    --font-gloria: 'var(--font-gloria)';
+    --font-satoshi: 'var(--font-satoshi)';
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
@@ -64,7 +66,10 @@
     @apply border-border;
   }
   body {
-    @apply bg-white font-sans text-foreground;
+    @apply bg-white font-satoshi text-foreground;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-gloria;
   }
 }
 

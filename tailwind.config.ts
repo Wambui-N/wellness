@@ -6,7 +6,8 @@ const config: Config = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}'
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/**/*.{ts,tsx}',
   ],
   theme: {
     container: {
@@ -24,7 +25,9 @@ const config: Config = {
         sans: ['var(--font-sans)', ...fontFamily.sans],
         serif: ['var(--font-serif)', ...fontFamily.serif],
         geist: ['var(--font-geist-sans)', ...fontFamily.sans],
-        'geist-mono': ['var(--font-geist-mono)', ...fontFamily.mono]
+        'geist-mono': ['var(--font-geist-mono)', ...fontFamily.mono],
+        gloria: ['var(--font-gloria)', 'serif'],
+        satoshi: ['var(--font-satoshi)', 'sans-serif'],
       },
       colors: {
         black: "#020C12",
@@ -41,10 +44,10 @@ const config: Config = {
           DEFAULT: 'hsl(var(--popover))',
           foreground: 'hsl(var(--popover-foreground))'
         },
-        // primary: {
-        //   DEFAULT: 'hsl(var(--primary))',
-        //   foreground: 'hsl(var(--primary-foreground))'
-        // },
+        primary: {
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))'
+        },
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))'

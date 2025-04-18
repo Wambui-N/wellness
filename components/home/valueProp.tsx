@@ -64,13 +64,7 @@ const item = {
 
 export function ValueProp() {
   return (
-    <section className="relative py-24 overflow-hidden bg-white text-[#020C12]">
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[#81c4ee]/10 blur-3xl" />
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-[#FF7F11]/10 blur-3xl" />
-      </div>
-
+    <section className="py-24 bg-white">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -79,15 +73,9 @@ export function ValueProp() {
           transition={{ duration: 0.5 }}
           className="max-w-3xl mx-auto text-center mb-20"
         >
-          <h2 className="text-4xl font-bold mb-6 leading-tight">
-            <span className="bg-gradient-to-r from-[#81c4ee] to-[#FF7F11] bg-clip-text text-transparent">
-              Wellness Dialogues
-            </span>{" "}
-            connects you to authentic patient experiences
+          <h2 className="font-gloria text-4xl font-bold mb-6 leading-tight">
+            The Wellness Notebook connects you to authentic patient experiences, empowering you to make informed healthcare decisions in a supportive and ethical community.
           </h2>
-          <p className="text-xl text-[#020C12]/70">
-            Empowering you to make informed healthcare decisions in a supportive and ethical community.
-          </p>
         </motion.div>
 
         <motion.div
@@ -95,21 +83,13 @@ export function ValueProp() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto"
+          className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto font-satoshi"
         >
           {values.map((value, index) => (
-            <motion.div
-              key={index}
-              variants={item}
-              className={`rounded-2xl shadow-sm ${index % 2 === 0 ? "md:translate-y-8" : ""}`}
-            >
+            <motion.div key={index} variants={item}>
               <DetailCard
                 title={value.title}
                 text={value.text}
-                icon={value.icon}
-                color={value.color}
-                bgColor={value.bgColor}
-                iconColor={value.iconColor}
               />
             </motion.div>
           ))}

@@ -31,14 +31,18 @@ export default function TagFilter({ selectedTag, onTagSelect }: TagFilterProps) 
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [showLeftArrow, setShowLeftArrow] = useState(false)
   const [showRightArrow, setShowRightArrow] = useState(false)
+  const [isScrolling, setIsScrolling] = useState(false)
 
   const scroll = (direction: 'left' | 'right') => {
     const container = scrollContainerRef.current
     if (!container) return
 
-    const scrollAmount = 200
+    setIsScrolling(true)
+    const scrollAmount = 300
     const targetScroll = container.scrollLeft + (direction === 'left' ? -scrollAmount : scrollAmount)
     container.scrollTo({ left: targetScroll, behavior: 'smooth' })
+    
+    setTimeout(() => setIsScrolling(false), 500)
   }
 
   const checkScroll = () => {
@@ -70,7 +74,8 @@ export default function TagFilter({ selectedTag, onTagSelect }: TagFilterProps) 
       {showLeftArrow && (
         <button
           onClick={() => scroll('left')}
-          className="absolute -left-4 top-1/3 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-primary shadow-md hover:bg-accent"
+          className="absolute -left-4 top-1/3 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-primary/90 text-white shadow-lg transition-all hover:bg-primary hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary/50"
+          aria-label="Scroll left"
         >
           <ChevronLeft className="h-5 w-5" />
         </button>
@@ -78,17 +83,29 @@ export default function TagFilter({ selectedTag, onTagSelect }: TagFilterProps) 
       
       <div 
         ref={scrollContainerRef}
-        className="no-scrollbar flex gap-2 overflow-x-auto scroll-smooth pb-2"
+        className="no-scrollbar flex gap-3 overflow-x-auto scroll-smooth pb-4 px-1"
       >
         {tags.map(tag => (
           <Badge
             key={tag}
             variant={selectedTag === tag ? "default" : "outline"}
             className={cn(
-              "cursor-pointer whitespace-nowrap hover:bg-primary/40",
-              selectedTag === tag && "bg-primary"
+              "cursor-pointer whitespace-nowrap px-4 py-2 text-sm transition-all duration-200",
+              "hover:bg-primary/20 hover:scale-105",
+              "focus:outline-none focus:ring-2 focus:ring-primary/50",
+              selectedTag === tag 
+                ? "bg-primary text-white shadow-md" 
+                : "bg-white/80 text-foreground hover:border-primary/50",
+              isScrolling && "pointer-events-none"
             )}
             onClick={() => onTagSelect(tag)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                onTagSelect(tag)
+              }
+            }}
           >
             {tag}
           </Badge>
@@ -98,7 +115,8 @@ export default function TagFilter({ selectedTag, onTagSelect }: TagFilterProps) 
       {showRightArrow && (
         <button
           onClick={() => scroll('right')}
-          className="absolute -right-4 top-1/3 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-primary shadow-md hover:bg-accent"
+          className="absolute -right-4 top-1/3 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-primary/90 text-white shadow-lg transition-all hover:bg-primary hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary/50"
+          aria-label="Scroll right"
         >
           <ChevronRight className="h-5 w-5" />
         </button>

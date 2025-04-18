@@ -7,11 +7,11 @@ import { combineName, formatDate } from '@/lib/utils'
 import { useUser } from '@clerk/nextjs'
 import { useToast } from '@/components/ui/use-toast'
 
-import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 
-import { Bookmark, BookmarkCheck, Sparkle, ThumbsUp } from 'lucide-react'
+import { Bookmark, BookmarkCheck, Sparkle, ThumbsUp, MessageSquare } from 'lucide-react'
 
 export default function PostItem({ post }: { post: Post }) {
   const { user } = useUser()
@@ -23,7 +23,7 @@ export default function PostItem({ post }: { post: Post }) {
   const isSaved = userData && post.savedBy?.includes(userData._id)
 
   const handleSave = async (e: React.MouseEvent) => {
-    e.preventDefault() // Prevent navigation when clicking the save button
+    e.preventDefault()
     if (!userData) {
       toast({
         title: 'Please sign in',
@@ -50,77 +50,96 @@ export default function PostItem({ post }: { post: Post }) {
   }
 
   return (
-    <li className='mb-4 pb-10 pt-5 sm:border-b'>
+    <li className='group relative mb-6 overflow-hidden rounded-xl border bg-white p-4 transition-all hover:shadow-sm'>
       <Link href={`/posts/${post.slug}`} className='block'>
-        {/* Author */}
-        <div className='inline-flex items-center gap-3'>
-          <Avatar className='size-6'>
-            <AvatarImage
-              src={post.author?.imageUrl}
-              alt={combineName(post.author)}
-            />
-            <AvatarFallback>{post.author?.firstName?.charAt(0)}</AvatarFallback>
-          </Avatar>
-          <div>
-            <h2 className='text-sm'>{combineName(post.author)}</h2>
+        {/* Author and Metadata */}
+        <div className='mb-3 flex items-center justify-between'>
+          <div className='flex items-center gap-3'>
+            <Avatar className='size-8 ring-2 ring-white'>
+              <AvatarImage
+                src={post.author?.imageUrl}
+                alt={combineName(post.author)}
+                className='object-cover'
+              />
+              <AvatarFallback className='bg-primary/10 text-primary'>
+                {post.author?.firstName?.charAt(0)}
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <h2 className='text-sm font-medium'>{combineName(post.author)}</h2>
+              <div className='flex items-center gap-2 text-xs text-muted-foreground'>
+                <Sparkle className='h-3 w-3 fill-yellow-500 text-yellow-500' />
+                <span>{formatDate(post._creationTime)}</span>
+              </div>
+            </div>
           </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleSave}
+            className={`h-8 w-8 rounded-full hover:bg-primary/10 ${
+              isSaved ? 'text-primary' : 'text-muted-foreground'
+            }`}
+          >
+            {isSaved ? (
+              <BookmarkCheck className='h-4 w-4' />
+            ) : (
+              <Bookmark className='h-4 w-4' />
+            )}
+          </Button>
         </div>
 
-        <div className='mt-4 flex flex-col-reverse items-start gap-4 sm:flex-row sm:items-center'>
-          {/* Post details */}
-          <div className='mt-4 w-full sm:mt-0 sm:w-3/4'>
+        {/* Post Content */}
+        <div className='flex gap-4'>
+          <div className='flex-1 space-y-3'>
             <div className='space-y-1'>
-              <h3 className='font-serif text-xl font-bold'>{post.title}</h3>
-              <p className='text-sm text-muted-foreground'>{post.excerpt}</p>
+              <h3 className='font-serif text-xl font-bold leading-tight group-hover:text-primary'>
+                {post.title}
+              </h3>
+              <p className='text-sm text-muted-foreground line-clamp-2'>
+                {post.excerpt}
+              </p>
             </div>
 
             {/* Tags */}
             {post.tagNames && post.tagNames.length > 0 && (
-              <div className='mt-3 flex flex-wrap gap-2'>
+              <div className='flex flex-wrap gap-2'>
                 {post.tagNames.map(tag => (
-                  <Badge key={tag} variant='secondary' className='font-light'>
+                  <Badge
+                    key={tag}
+                    variant='secondary'
+                    className='bg-primary/10 text-primary hover:bg-primary/20'
+                  >
                     {tag}
                   </Badge>
                 ))}
               </div>
             )}
 
-            <div className='mt-4 flex items-center justify-between text-sm text-muted-foreground'>
-              <div className='flex items-center gap-4'>
-                <Sparkle className='h-4 w-4 fill-yellow-500 text-yellow-500' />
-                <span>{formatDate(post._creationTime)}</span>
-                <Separator orientation='vertical' className='h-4' />
-                <div className='flex items-center gap-2'>
-                  <ThumbsUp className='h-4 w-4' />
-                  <span>{post.likes}</span>
-                </div>
-                <button
-                  onClick={handleSave}
-                  className={`flex items-center gap-2 hover:text-foreground ${
-                    isSaved ? 'text-primary' : ''
-                  }`}
-                >
-                  {isSaved ? (
-                    <BookmarkCheck className='h-4 w-4' />
-                  ) : (
-                    <Bookmark className='h-4 w-4' />
-                  )}
-                </button>
+            {/* Stats */}
+            <div className='flex items-center gap-4 text-sm text-muted-foreground'>
+              <div className='flex items-center gap-2'>
+                <ThumbsUp className='h-4 w-4' />
+                <span>{post.likes}</span>
+              </div>
+              <div className='flex items-center gap-2'>
+                <MessageSquare className='h-4 w-4' />
+                <span>{post.commentCount || 0}</span>
               </div>
             </div>
           </div>
 
           {/* Cover Image */}
-          <div className='relative aspect-video w-full sm:w-1/4'>
-            {post.coverImageUrl && (
+          {post.coverImageUrl && (
+            <div className='relative aspect-square w-24 overflow-hidden rounded-lg'>
               <Image
                 alt=''
                 src={post.coverImageUrl}
-                className='h-full w-full rounded-md object-cover'
+                className='object-cover transition-transform duration-300 group-hover:scale-105'
                 fill
               />
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </Link>
     </li>

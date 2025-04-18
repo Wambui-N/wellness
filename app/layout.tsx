@@ -11,6 +11,32 @@ import Footer from '@/components/footer'
 
 import './globals.css'
 
+const gloria = localFont({
+  src: './fonts/ZTGloraPro-Regular.woff',
+  variable: '--font-gloria'
+})
+
+const satoshi = localFont({
+  src: [
+    {
+      path: './fonts/Satoshi-Regular.otf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: './fonts/Satoshi-Medium.otf',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: './fonts/Satoshi-Bold.otf',
+      weight: '700',
+      style: 'normal',
+    }
+  ],
+  variable: '--font-satoshi'
+})
+
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
   variable: '--font-geist-sans',
@@ -28,8 +54,8 @@ const playfair = Playfair_Display({
 })
 
 export const metadata: Metadata = {
-  title: 'Next Shadcn Template',
-  description: 'NextJs template with shadcn/ui'
+  title: 'The Wellness Notebook',
+  description: 'Share your healthcare journey'
 }
 
 export default function RootLayout({
@@ -43,10 +69,8 @@ export default function RootLayout({
         <body
           className={cn(
             'flex min-h-screen flex-col',
-            geistSans.variable,
-            geistMono.variable,
-            inter.variable,
-            playfair.variable
+            gloria.variable,
+            satoshi.variable
           )}
         >
           <Providers>

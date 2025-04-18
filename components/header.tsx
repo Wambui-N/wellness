@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useUser } from '@clerk/nextjs'
 import { useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
@@ -27,15 +28,30 @@ export default function Header() {
     : '/profile'
 
   return (
-    <header className='fixed inset-x-0 top-0 z-50  bg-background/0 py-4 backdrop-blur-sm'>
+    <header className='fixed inset-x-0 top-0 z-50 bg-background/0 py-4 backdrop-blur-md'>
       <nav className='container flex max-w-none items-center justify-between'>
-        <Link href='/' className='font-serif text-xl font-semibold'>
-          Wellness Dialogues
+        <Link 
+          href='/' 
+          className='flex items-center gap-2 font-serif text-xl font-semibold text-foreground hover:text-primary transition-colors'
+        >
+          <Image 
+            src="/WD Dark Logo.png" 
+            alt="The Wellness Notebook Logo" 
+            width={32} 
+            height={32}
+            className="h-8 w-8"
+          />
+          <span>The Wellness Notebook</span>
         </Link>
 
         <div className='flex items-center gap-6'>
           <SignedIn>
-            <Button size='sm' variant='secondary' asChild className="flex items-center gap-2">
+            <Button 
+              size='sm' 
+              variant='outline' 
+              asChild 
+              className="flex items-center gap-2 hover:bg-primary/10 hover:text-primary border-border/40"
+            >
               <Link href='/write'>
                 <Pencil className="h-4 w-4" />
                 Write
@@ -43,27 +59,43 @@ export default function Header() {
             </Button>
           </SignedIn>
 
-          <Link href='/about' className="text-sm hover:text-gray-600">
-            About
-          </Link>
+          <SignedOut>
+            <Link 
+              href='/about' 
+              className="text-sm text-muted-foreground hover:text-primary transition-colors"
+            >
+              About
+            </Link>
+          </SignedOut>
 
           <SignedIn>
-            <Link href={profileUrl} className="flex items-center">
+            <Link 
+              href={profileUrl} 
+              className="flex items-center rounded-full ring-1 ring-border/40 p-1 hover:ring-primary/50 transition-all"
+            >
               {userData?.imageUrl ? (
-                <img 
+                <Image 
                   src={userData.imageUrl} 
                   alt="Profile" 
-                  className="h-8 w-8 rounded-full"
+                  width={32}
+                  height={32}
+                  className="h-8 w-8 rounded-full object-cover"
                 />
               ) : (
-                <User className='h-6 w-6' />
+                <User className='h-6 w-6 text-muted-foreground' />
               )}
             </Link>
           </SignedIn>
 
           <SignedOut>
-            <SignInButton>
-              <Button size='sm'>Sign in</Button>
+            <SignInButton mode="modal">
+              <Button 
+                size='sm' 
+                variant='outline'
+                className="hover:bg-primary/10 hover:text-primary border-border/40"
+              >
+                Sign in
+              </Button>
             </SignInButton>
           </SignedOut>
         </div>

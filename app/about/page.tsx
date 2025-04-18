@@ -58,11 +58,11 @@ export default function AboutPage() {
 
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#81c4ee] to-[#FF7F11] bg-clip-text text-transparent">
-                About Wellness Dialogues
+                About The Wellness Notebook
               </span>
             </h1>
             <p className="text-xl text-[#020C12]/70 mb-12">
-              Everyone is a patient—whether you were one yesterday, are one today, or will be one tomorrow. Wellness Dialogues is your notebook, a collective diary that records and enriches our shared healthcare experiences.
+              Everyone is a patient—whether you were one yesterday, are one today, or will be one tomorrow. The Wellness Notebook is your notebook, a collective diary that records and enriches our shared healthcare experiences.
             </p>
           </motion.div>
         </div>
@@ -80,7 +80,7 @@ export default function AboutPage() {
           >
             <h2 className="text-3xl font-bold mb-6">Who We Are</h2>
             <p className="text-xl text-[#020C12]/70">
-              Wellness Dialogues is a digital platform for informal reviews of healthcare services. By sharing our diverse encounters with the medical fraternity, we aim to enlighten and empower patients to make informed choices.
+              The Wellness Notebook is a digital platform for informal reviews of healthcare services. By sharing our diverse encounters with the medical fraternity, we aim to enlighten and empower patients to make informed choices.
             </p>
           </motion.div>
         </div>
@@ -128,13 +128,13 @@ export default function AboutPage() {
             transition={{ duration: 0.5 }}
             className="max-w-3xl mx-auto"
           >
-            <h2 className="text-3xl font-bold mb-6 text-center">Founder's Inspiration</h2>
+            <h2 className="text-3xl font-bold mb-6 text-center">Founder&apos;s Inspiration</h2>
             <div className="space-y-6 text-[#020C12]/70">
               <p className="text-xl">
                 As a writer with a passion for medicine, I have firsthand experience as a patient. After being hospitalized following an accident, I spent a month under the care of dedicated healthcare professionals. The experience opened my eyes to the intricacies of the healthcare ecosystem and its vital role in society.
               </p>
               <p className="text-xl">
-                Yet, I noticed a significant gap: valuable information about healthcare services and their quality remains fragmented. Wellness Dialogues was born to fill this gap—a network where patients share experiences to benefit others, creating a collaborative notebook for the wellness journey.
+                Yet, I noticed a significant gap: valuable information about healthcare services and their quality remains fragmented. The Wellness Notebook was born to fill this gap—a network where patients share experiences to benefit others, creating a collaborative notebook for the wellness journey.
               </p>
             </div>
           </motion.div>

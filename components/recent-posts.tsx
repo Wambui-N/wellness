@@ -23,9 +23,9 @@ export default function RecentPosts() {
   }
 
   return (
-    <Card className='flex-1'>
+    <Card className='flex-1 bg-black/80 backdrop-blur-md border-white/20 shadow-2xl'>
       <CardHeader>
-        <CardTitle>Staff picks</CardTitle>
+        <CardTitle className='text-white'>Staff picks</CardTitle>
       </CardHeader>
 
       <CardContent>
@@ -36,24 +36,24 @@ export default function RecentPosts() {
             <li key={post._id}>
               <Link
                 href={`/posts/${post.slug}`}
-                className='block px-4 py-2 hover:bg-muted'
+                className='block px-4 py-2 rounded-lg transition-colors hover:bg-white/10'
               >
                 <div className='inline-flex items-end gap-2'>
-                  <Avatar className='size-5'>
+                  <Avatar className='size-5 ring-1 ring-white/20'>
                     <AvatarImage
                       src={post.author?.imageUrl}
                       alt={combineName(post.author)}
                     />
-                    <AvatarFallback>
+                    <AvatarFallback className='bg-white/20 text-white'>
                       {post.author?.firstName?.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
 
-                  <h2 className='text-xs leading-3 text-muted-foreground'>
+                  <h2 className='text-xs leading-3 text-white/80'>
                     {combineName(post.author)}
                   </h2>
                 </div>
-                <h3 className='text-sm font-semibold'>{post.title}</h3>
+                <h3 className='text-sm font-semibold text-white'>{post.title}</h3>
               </Link>
             </li>
           ))}
@@ -61,7 +61,7 @@ export default function RecentPosts() {
       </CardContent>
 
       <CardFooter>
-        <Link href='/' className='text-sm font-light text-emerald-600'>
+        <Link href='/' className='text-sm font-light text-white/80 hover:text-white transition-colors'>
           See the full list
         </Link>
       </CardFooter>

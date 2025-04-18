@@ -158,7 +158,9 @@ export default function Editor({
         <Info className="h-4 w-4" />
         <AlertDescription>
           <p className="text-sm text-muted-foreground">
-            Start typing to begin. Use the toolbar above for formatting. Press{' '}
+            Click anywhere to start writing. Use the toolbar above for formatting or type{' '}
+            <kbd className="rounded bg-muted px-2 py-1 text-xs">/</kbd>{' '}
+            for quick formatting options like headings, lists, and more. Press{' '}
             <kbd className="rounded bg-muted px-2 py-1 text-xs">Ctrl/Cmd + S</kbd>{' '}
             to save manually.
           </p>
@@ -173,7 +175,7 @@ export default function Editor({
           className={cn(
             'relative w-full max-w-screen-lg bg-background',
             editable
-              ? 'min-h-[450px] max-h-[600px] overflow-y-auto rounded-md border border-input shadow-sm p-4'
+              ? 'min-h-[450px] max-h-[600px] overflow-y-auto rounded-md border border-input shadow-sm p-4 cursor-text'
               : 'min-h-[500px]'
           )}
           editorProps={{
@@ -186,6 +188,13 @@ export default function Editor({
                   return true
                 }
                 return handleCommandNavigation(event)
+              },
+              click: (view, event) => {
+                // Focus the editor when clicking anywhere in the container
+                if (!view.hasFocus()) {
+                  view.focus()
+                }
+                return false
               }
             },
             handlePaste: (view, event) => handleImagePaste(view, event, uploadFn),
@@ -195,7 +204,7 @@ export default function Editor({
               class: `prose dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full ${
                 editable ? 'cursor-text text-sm' : 'cursor-default !p-0'
               }`,
-              'data-placeholder': 'Type / for commands...'
+              'data-placeholder': 'Click anywhere to start writing. Type / for formatting options...'
             }
           }}
           onUpdate={({ editor }) => {
