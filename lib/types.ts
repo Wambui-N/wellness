@@ -26,3 +26,18 @@ export type Post = {
   } | null
   tagNames?: string[]
 }
+
+export type Comment = {
+  _id: Id<'comments'>
+  content: string
+  createdAt: number
+  author: {
+    _id: Id<'users'>
+    name?: string
+    imageUrl?: string
+  }
+  likes: number
+  likedBy: Id<'users'>[]
+  parentId?: Id<'comments'>
+  postId: Id<'posts'>
+}

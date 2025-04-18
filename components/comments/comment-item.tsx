@@ -12,20 +12,10 @@ import { useToast } from '@/components/ui/use-toast'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import CommentForm from './comment-form'
+import { Comment } from '@/lib/types'
 
 interface CommentItemProps {
-  comment: {
-    _id: Id<'comments'>
-    content: string
-    createdAt: number
-    author: {
-      _id: Id<'users'>
-      name?: string
-      imageUrl?: string
-    }
-    likes: number
-    likedBy: Id<'users'>[]
-  }
+  comment: Comment
   postId: Id<'posts'>
   onCommentAdded?: () => void
 }
@@ -127,7 +117,7 @@ export default function CommentItem({ comment, postId, onCommentAdded }: Comment
 
       {showReplies && replies && (
         <div className='ml-12 space-y-4'>
-          {replies.map((reply: { _id: any; content?: string; createdAt?: number; author?: { _id: Id<"users">; name?: string; imageUrl?: string }; likes?: number; likedBy?: Id<"users">[] }) => (
+          {replies.map((reply) => (
             <CommentItem
               key={reply._id}
               comment={reply}
