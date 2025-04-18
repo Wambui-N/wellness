@@ -30,7 +30,7 @@ export type Post = {
 export type Comment = {
   _id: Id<'comments'>
   content: string
-  createdAt: number
+  _creationTime: number
   author: {
     _id: Id<'users'>
     name?: string
