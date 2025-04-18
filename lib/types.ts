@@ -31,6 +31,7 @@ export type Comment = {
   _id: Id<'comments'>
   content: string
   _creationTime: number
+  authorId: Id<'users'>
   author: {
     _id: Id<'users'>
     _creationTime: number
@@ -44,7 +45,7 @@ export type Comment = {
     clerkUserId: string
   } | null
   likes?: number
-  likedBy: Id<'users'>[]
+  likedBy?: Id<'users'>[]
   parentId?: Id<'comments'>
   postId: Id<'posts'>
 }
