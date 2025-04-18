@@ -27,7 +27,7 @@ export default function Post({ slug }: { slug: string }) {
   const { user } = useUser()
   const post = useQuery(api.posts.getPostBySlug, { slug })
   const userData = useQuery(api.users.current)
-  const commentCount = useQuery(api.comments.getCommentsCount, post ? { postId: post._id } : null)
+  const commentCount = useQuery(api.comments.getCommentsCount, post ? { postId: post._id } : "skip")
   
   const likePost = useMutation(api.posts.likePost)
   const unlikePost = useMutation(api.posts.unlikePost)
@@ -130,7 +130,7 @@ export default function Post({ slug }: { slug: string }) {
               className='flex items-center gap-2 font-light text-muted-foreground hover:text-foreground'
             >
               <MessageSquare className='size-5' strokeWidth={1.5} />
-              <span>{commentCount ?? 0}</span>
+              <span>{commentCount}</span>
             </Button>
           </div>
 
