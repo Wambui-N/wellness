@@ -75,7 +75,7 @@ export default function CommentItem({ comment, postId, onCommentAdded }: Comment
           <div className='flex items-center gap-2'>
             <span className='font-medium'>{comment.author.name ?? 'Anonymous User'}</span>
             <span className='text-sm text-muted-foreground'>
-              {formatDistanceToNow(new Date(comment._creationTime), { addSuffix: true })}
+              {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
             </span>
           </div>
           <p className='text-sm'>{comment.content}</p>

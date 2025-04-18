@@ -12,7 +12,7 @@ export type Post = {
   content: string
   authorId: Id<'users'>
   likes: number
-  commentCount: number
+  commentCount?: number
   tags: string[]
   author: {
     _id: Id<'users'>
