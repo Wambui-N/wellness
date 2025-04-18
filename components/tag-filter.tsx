@@ -70,7 +70,7 @@ export default function TagFilter({ selectedTag, onTagSelect }: TagFilterProps) 
       {showLeftArrow && (
         <button
           onClick={() => scroll('left')}
-          className="absolute -left-4 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-background shadow-md hover:bg-accent"
+          className="absolute -left-4 top-1/3 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-primary shadow-md hover:bg-accent"
         >
           <ChevronLeft className="h-5 w-5" />
         </button>
@@ -85,7 +85,7 @@ export default function TagFilter({ selectedTag, onTagSelect }: TagFilterProps) 
             key={tag}
             variant={selectedTag === tag ? "default" : "outline"}
             className={cn(
-              "cursor-pointer whitespace-nowrap hover:bg-primary/90",
+              "cursor-pointer whitespace-nowrap hover:bg-primary/40",
               selectedTag === tag && "bg-primary"
             )}
             onClick={() => onTagSelect(tag)}
@@ -98,7 +98,7 @@ export default function TagFilter({ selectedTag, onTagSelect }: TagFilterProps) 
       {showRightArrow && (
         <button
           onClick={() => scroll('right')}
-          className="absolute -right-4 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-background shadow-md hover:bg-accent"
+          className="absolute -right-4 top-1/3 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-primary shadow-md hover:bg-accent"
         >
           <ChevronRight className="h-5 w-5" />
         </button>

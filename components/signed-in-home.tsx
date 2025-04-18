@@ -3,10 +3,11 @@
 import { useState } from 'react'
 import Posts from "@/components/posts";
 import RecentPosts from "@/components/recent-posts";
+import RecommendedTopics from "@/components/recommended-topics";
 import WhoToFollow from "@/components/who-to-follow";
 import TagFilter from "@/components/tag-filter";
 
-export function SignedInHome() {
+export default function SignedInHome() {
   const [selectedTag, setSelectedTag] = useState("All")
 
   return (
@@ -20,10 +21,10 @@ export function SignedInHome() {
 
           <aside className='flex w-full flex-col justify-between gap-6 pb-10 md:flex-row xl:sticky xl:top-[65px] xl:w-[350px] xl:flex-col xl:py-20'>
             <RecentPosts />
+            {/* <RecommendedTopics /> */}
             <WhoToFollow />
           </aside>
         </div>
       </div>
     </section>
-  )
-} 
+  )}

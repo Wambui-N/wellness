@@ -9,13 +9,18 @@ import { CTA } from "@/components/home/cta"
 import { motion } from "framer-motion"
 import { ArrowRight, Heart, MessageSquare, Bookmark } from "lucide-react"
 import Link from "next/link"
+import dynamic from 'next/dynamic'
 
 export default function Home() {
   const { isSignedIn } = useUser()
 
-  if (isSignedIn) {
-    return null
-  }
+if (isSignedIn) {
+  // Import and use the SignedInHome component instead of returning null
+  const SignedInHome = dynamic(() => import('@/components/signed-in-home'), {
+    loading: () => <div>Loading...</div>
+  })
+  return <SignedInHome />
+}
 
   return (
     <main className="min-h-screen bg-white">

@@ -14,7 +14,7 @@ import {
   SheetTrigger
 } from '@/components/ui/sheet'
 
-import { Menu, User } from 'lucide-react'
+import { Menu, User, Pencil } from 'lucide-react'
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
 import { Button } from '@/components/ui/button'
 
@@ -29,73 +29,43 @@ export default function Header() {
   return (
     <header className='fixed inset-x-0 top-0 z-50  bg-background/0 py-4 backdrop-blur-sm'>
       <nav className='container flex max-w-none items-center justify-between'>
-        <Sheet>
-          <SheetTrigger className='sm:hidden'>
-            <Menu className='h-6 w-6' />
-          </SheetTrigger>
-          <SheetContent side='left'>
-            <ul className='flex flex-col gap-3 text-sm'>
-              <li className='font-serif text-2xl font-semibold'>
-                <SheetClose asChild>
-                  <Link href='/'>Wellness Dialogues</Link>
-                </SheetClose>
-              </li>
-              <SignedIn>
-                <li>
-                  <SheetClose asChild>
-                    <Link href={profileUrl} className='flex items-center gap-2'>
-                      <User className='h-4 w-4' />
-                      Profile
-                    </Link>
-                  </SheetClose>
-                </li>
-              </SignedIn>
-              <SignedOut>
-                <li>
-                  <SheetClose asChild>
-                    <Link href='/about'>About</Link>
-                  </SheetClose>
-                </li>
-              </SignedOut>
-            </ul>
-          </SheetContent>
-        </Sheet>
+        <Link href='/' className='font-serif text-xl font-semibold'>
+          Wellness Dialogues
+        </Link>
 
-        <ul className='hidden items-center gap-14 text-sm font-medium sm:flex'>
-          <li className='font-serif text-xl font-semibold'>
-            <Link href='/'>Wellness Dialogues</Link>
-          </li>
+        <div className='flex items-center gap-6'>
           <SignedIn>
-            <li>
-              <Link href={profileUrl} className='flex items-center gap-2'>
-                <User className='h-4 w-4' />
-                Profile
+            <Button size='sm' variant='secondary' asChild className="flex items-center gap-2">
+              <Link href='/write'>
+                <Pencil className="h-4 w-4" />
+                Write
               </Link>
-            </li>
+            </Button>
           </SignedIn>
-          <SignedOut>
-            <li>
-              <Link href='/about'>About</Link>
-            </li>
-          </SignedOut>
-        </ul>
 
-        <div className='flex items-center justify-between gap-6'>
-          <ThemeToggle />
+          <Link href='/about' className="text-sm hover:text-gray-600">
+            About
+          </Link>
 
-          <Button size='sm' variant='secondary' asChild>
-            <Link href='/write'>Write</Link>
-          </Button>
+          <SignedIn>
+            <Link href={profileUrl} className="flex items-center">
+              {userData?.imageUrl ? (
+                <img 
+                  src={userData.imageUrl} 
+                  alt="Profile" 
+                  className="h-8 w-8 rounded-full"
+                />
+              ) : (
+                <User className='h-6 w-6' />
+              )}
+            </Link>
+          </SignedIn>
 
           <SignedOut>
             <SignInButton>
               <Button size='sm'>Sign in</Button>
             </SignInButton>
           </SignedOut>
-
-          <SignedIn>
-            <UserButton afterSignOutUrl="/" />
-          </SignedIn>
         </div>
       </nav>
     </header>

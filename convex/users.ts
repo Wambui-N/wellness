@@ -1,6 +1,6 @@
 import { UserJSON } from '@clerk/backend'
 import { v, Validator } from 'convex/values'
-import { internalMutation, query, QueryCtx } from './_generated/server'
+import { internalMutation, query, mutation, QueryCtx } from './_generated/server'
 import { Id } from './_generated/dataModel'
 
 export const getUsers = query({
@@ -66,7 +66,7 @@ export const getCurrentUserOrThrow = async (ctx: any) => {
 
   const user = await ctx.db
     .query('users')
-    .withIndex('byClerkUserId', q => q.eq('clerkUserId', identity.subject))
+    .withIndex('byClerkUserId', (q: { eq: (arg0: string, arg1: any) => any }) => q.eq('clerkUserId', identity.subject))
     .first()
 
   if (!user) throw new Error('User not found')
@@ -94,16 +94,20 @@ export const getUserByUsername = query({
     const [firstName, lastName] = username.split('-')
     if (!firstName || !lastName) return null
 
-    const user = await ctx.db
-      .query('users')
-      .filter((q) => 
-        q.and(
-          q.eq(q.field('firstName'), firstName),
-          q.eq(q.field('lastName'), lastName)
-        )
-      )
-      .first()
+    const users = await ctx.db.query('users').collect()
+    return users.find(user => 
+      user.firstName?.toLowerCase() === firstName.toLowerCase() && 
+      user.lastName?.toLowerCase() === lastName.toLowerCase()
+    ) || null
+  }
+})
 
-    return user
+export const updateAvatar = mutation({
+  args: { storageId: v.id('_storage') },
+  handler: async (ctx, { storageId }) => {
+    const user = await getCurrentUserOrThrow(ctx)
+    const imageUrl = await ctx.storage.getUrl(storageId)
+    if (!imageUrl) throw new Error('Failed to get image URL')
+    await ctx.db.patch(user._id, { imageUrl })
   }
 })
