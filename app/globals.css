@@ -8,7 +8,7 @@
     --font-satoshi: 'var(--font-satoshi)';
     
     /* HSL values with proper formatting */
-    --background: 0 0% 100%;
+    --background: 0 0% 96.1%; /* #F5F5F5 */
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
@@ -39,7 +39,7 @@
   }
 
   .dark {
-    --background: 240 10% 3.9%;
+    --background: 0 0% 96.1%; /* #F5F5F5 */
     --foreground: 0 0% 98%;
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
@@ -63,9 +63,9 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-    --glass-bg: 0 0% 0% / 0.85;
-    --glass-border: 0 0% 100% / 0.2;
-    --glass-text: 0 0% 100%;
+    --glass-bg: 0 0% 100% / 0.05;
+    --glass-border: 0 0% 100% / 0.1;
+    --glass-text: 0 0% 100% / 0.9;
   }
 }
 
@@ -74,7 +74,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background font-satoshi text-foreground;
+    @apply bg-white font-satoshi text-foreground;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-gloria;
@@ -92,19 +92,19 @@
   }
   
   .glass-card {
-    @apply bg-[hsl(var(--glass-bg))] backdrop-blur-md border-[hsl(var(--glass-border))] shadow-2xl;
+    @apply bg-black backdrop-blur-md border-white/20 shadow-2xl;
   }
   
   .glass-text {
-    @apply text-[hsl(var(--glass-text))];
+    @apply text-white;
   }
   
   .glass-text-muted {
-    @apply text-[hsl(var(--glass-text)/0.8)];
+    @apply text-white/80;
   }
   
   .glass-ring {
-    @apply ring-1 ring-[hsl(var(--glass-border))];
+    @apply ring-1 ring-white/20;
   }
 }
 
