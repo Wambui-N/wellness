@@ -58,12 +58,14 @@ export default function CommentItem({ comment, postId, onCommentAdded }: Comment
     <div className='space-y-4'>
       <div className='flex gap-4'>
         <Avatar>
-          <AvatarImage src={comment.author.imageUrl} alt={comment.author.name ?? 'User'} />
-          <AvatarFallback>{comment.author.name?.[0] ?? 'U'}</AvatarFallback>
+          <AvatarImage src={comment.author?.imageUrl} alt={comment.author?.firstName ?? 'User'} />
+          <AvatarFallback>{comment.author?.firstName?.[0] ?? 'U'}</AvatarFallback>
         </Avatar>
         <div className='flex-1 space-y-2'>
           <div className='flex items-center gap-2'>
-            <span className='font-medium'>{comment.author.name ?? 'Anonymous User'}</span>
+            <span className='font-medium'>
+              {comment.author ? `${comment.author.firstName} ${comment.author.lastName}` : 'Anonymous User'}
+            </span>
             <span className='text-sm text-muted-foreground'>
               {formatDistanceToNow(new Date(comment._creationTime), { addSuffix: true })}
             </span>
