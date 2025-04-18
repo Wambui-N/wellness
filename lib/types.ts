@@ -43,7 +43,7 @@ export type Comment = {
     email: string
     clerkUserId: string
   } | null
-  likes: number
+  likes?: number
   likedBy: Id<'users'>[]
   parentId?: Id<'comments'>
   postId: Id<'posts'>

@@ -79,7 +79,7 @@ export default function CommentItem({ comment, postId, onCommentAdded }: Comment
               onClick={handleLike}
             >
               <Heart className='h-4 w-4 mr-1' />
-              {comment.likes}
+              {comment.likes ?? 0}
             </Button>
             <Button
               variant='ghost'
