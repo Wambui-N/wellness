@@ -32,7 +32,7 @@ const config: Config = {
       colors: {
         black: "#020C12",
         white: "#F5F5F5",
-        primary: "#81c4ee",
+        primaryBlue: "#81c4ee",
         orange: "#FF7F11",
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
