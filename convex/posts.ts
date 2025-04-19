@@ -1,10 +1,10 @@
 import { v } from 'convex/values'
-import { query, mutation } from './_generated/server'
+import { query, mutation, QueryCtx } from './_generated/server'
 import { getCurrentUserOrThrow } from './users'
 import { Id } from './_generated/dataModel'
 
 // Helper function to calculate comment count
-async function calculateCommentCount(ctx, postId) {
+async function calculateCommentCount(ctx: QueryCtx, postId: Id<'posts'>): Promise<number> {
   // Get comment count for this post
   const comments = await ctx.db
     .query('comments')
