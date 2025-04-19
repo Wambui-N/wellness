@@ -38,6 +38,8 @@ export const getPosts = query({
     return await Promise.all(
       posts.map(async (post) => {
         const author = await ctx.db.get(post.authorId);
+        if (!author) return null;
+        
         const tagDocs = await Promise.all(
           post.tags.map(tagId => ctx.db.get(tagId))
         );
@@ -62,7 +64,7 @@ export const getPosts = query({
             : {})
         };
       })
-    );
+    ).then(posts => posts.filter((post): post is NonNullable<typeof post> => post !== null));
   },
 });
 
@@ -101,6 +103,7 @@ export const getPostBySlug = query({
     }
 
     const author = await ctx.db.get(post.authorId)
+    if (!author) return null;
 
     return {
       ...post,
@@ -200,6 +203,8 @@ export const getSavedPosts = query({
         const post = await ctx.db.get(postId);
         if (!post) return null;
         const author = await ctx.db.get(post.authorId);
+        if (!author) return null;
+        
         const tagDocs = await Promise.all(
           post.tags.map(tagId => ctx.db.get(tagId))
         );
@@ -243,6 +248,8 @@ export const getLikedPosts = query({
         const post = await ctx.db.get(postId);
         if (!post) return null;
         const author = await ctx.db.get(post.authorId);
+        if (!author) return null;
+        
         const tagDocs = await Promise.all(
           post.tags.map(tagId => ctx.db.get(tagId))
         );

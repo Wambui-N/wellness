@@ -10,9 +10,11 @@ export const getComments = query({
       .withIndex('byPostId', q => q.eq('postId', postId))
       .collect()
 
-    return await Promise.all(
+    const commentsWithAuthors = await Promise.all(
       comments.map(async comment => {
         const author = await ctx.db.get(comment.authorId)
+        if (!author) return null;
+        
         const replies = await ctx.db
           .query('comments')
           .withIndex('byParentId', q => q.eq('parentId', comment._id))
@@ -21,6 +23,7 @@ export const getComments = query({
         const repliesWithAuthors = await Promise.all(
           replies.map(async reply => {
             const replyAuthor = await ctx.db.get(reply.authorId)
+            if (!replyAuthor) return null;
             return { ...reply, author: replyAuthor }
           })
         )
@@ -28,10 +31,12 @@ export const getComments = query({
         return {
           ...comment,
           author,
-          replies: repliesWithAuthors
+          replies: repliesWithAuthors.filter((reply): reply is NonNullable<typeof reply> => reply !== null)
         }
       })
     )
+
+    return commentsWithAuthors.filter((comment): comment is NonNullable<typeof comment> => comment !== null);
   }
 })
 
@@ -120,11 +125,14 @@ export const getReplies = query({
       .withIndex('byParentId', q => q.eq('parentId', parentId))
       .collect()
 
-    return await Promise.all(
+    const repliesWithAuthors = await Promise.all(
       replies.map(async reply => {
         const author = await ctx.db.get(reply.authorId)
+        if (!author) return null;
         return { ...reply, author }
       })
     )
+
+    return repliesWithAuthors.filter((reply): reply is NonNullable<typeof reply> => reply !== null);
   }
 }) 
