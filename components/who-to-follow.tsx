@@ -54,7 +54,10 @@ export default function WhoToFollow() {
                 asChild
                 className='rounded-full font-light bg-white/10 border-white/20 text-white hover:bg-white/20'
               >
-                <Link href={`/${user.firstName?.toLowerCase() || 'user'}-${user.lastName?.toLowerCase() || 'profile'}`}>
+                <Link
+                  href={`/author/${user.firstName.toLowerCase()}-${user.lastName.toLowerCase()}`}
+                  className="text-white/80 hover:text-white transition-colors"
+                >
                   Read Posts
                 </Link>
               </Button>

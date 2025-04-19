@@ -23,9 +23,7 @@ export default function Header() {
   const { user } = useUser()
   const userData = useQuery(api.users.current)
   
-  const profileUrl = userData?.firstName && userData?.lastName 
-    ? `/${userData.firstName.toLowerCase()}-${userData.lastName.toLowerCase()}`
-    : '/profile'
+  const profileUrl = `/author/${user.firstName?.toLowerCase()}-${user.lastName?.toLowerCase()}`
 
   return (
     <header className='fixed inset-x-0 top-0 z-50 bg-white/80 py-4 backdrop-blur-sm border-b border-gray-200'>
