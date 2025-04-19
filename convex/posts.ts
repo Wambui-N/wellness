@@ -3,6 +3,27 @@ import { query, mutation } from './_generated/server'
 import { getCurrentUserOrThrow } from './users'
 import { Id } from './_generated/dataModel'
 
+// Helper function to calculate comment count
+async function calculateCommentCount(ctx, postId) {
+  // Get comment count for this post
+  const comments = await ctx.db
+    .query('comments')
+    .withIndex('byPostId', q => q.eq('postId', postId))
+    .collect();
+
+  // Get replies to each comment and count them
+  const repliesPromises = comments.map(comment =>
+    ctx.db
+      .query('comments')
+      .withIndex('byParentId', q => q.eq('parentId', comment._id))
+      .collect()
+  );
+  
+  const replies = await Promise.all(repliesPromises);
+  const totalReplies = replies.reduce((sum, replyArray) => sum + replyArray.length, 0);
+  return comments.length + totalReplies;
+}
+
 export const generateUploadUrl = mutation(async ctx => {
   return await ctx.storage.generateUploadUrl()
 })
@@ -22,23 +43,8 @@ export const getPosts = query({
         );
         const tagNames = tagDocs.filter(Boolean).map(tag => tag!.name);
 
-        // Get comment count for this post
-        const comments = await ctx.db
-          .query('comments')
-          .withIndex('byPostId', q => q.eq('postId', post._id))
-          .collect();
-
-        // Get replies to each comment and count them
-        const repliesPromises = comments.map(comment =>
-          ctx.db
-            .query('comments')
-            .withIndex('byParentId', q => q.eq('parentId', comment._id))
-            .collect()
-        );
-        
-        const replies = await Promise.all(repliesPromises);
-        const totalReplies = replies.reduce((sum, replyArray) => sum + replyArray.length, 0);
-        const commentCount = comments.length + totalReplies;
+        // Calculate comment count using the helper function
+        const commentCount = await calculateCommentCount(ctx, post._id);
 
         return {
           ...post,
@@ -68,23 +74,8 @@ export const getRecentPosts = query({
       posts.map(async post => {
         const author = await ctx.db.get(post.authorId)
 
-        // Get comment count for this post
-        const comments = await ctx.db
-          .query('comments')
-          .withIndex('byPostId', q => q.eq('postId', post._id))
-          .collect();
-
-        // Get replies to each comment and count them
-        const repliesPromises = comments.map(comment =>
-          ctx.db
-            .query('comments')
-            .withIndex('byParentId', q => q.eq('parentId', comment._id))
-            .collect()
-        );
-        
-        const replies = await Promise.all(repliesPromises);
-        const totalReplies = replies.reduce((sum, replyArray) => sum + replyArray.length, 0);
-        const commentCount = comments.length + totalReplies;
+        // Calculate comment count using the helper function
+        const commentCount = await calculateCommentCount(ctx, post._id);
 
         return {
           ...post,
@@ -176,11 +167,16 @@ export const getUserPosts = query({
     const postsWithData = await Promise.all(
       posts.map(async (post) => {
         const author = await ctx.db.get(post.authorId);
+        
+        // Calculate comment count using the helper function
+        const commentCount = await calculateCommentCount(ctx, post._id);
+        
         return {
           ...post,
           author,
           savedBy: post.savedBy || [],
           likedBy: post.likedBy || [],
+          commentCount
         };
       })
     );
@@ -207,6 +203,9 @@ export const getSavedPosts = query({
         );
         const tagNames = tagDocs.filter(Boolean).map(tag => tag!.name);
 
+        // Calculate comment count using the helper function
+        const commentCount = await calculateCommentCount(ctx, post._id);
+
         return {
           ...post,
           author,
@@ -214,6 +213,7 @@ export const getSavedPosts = query({
           savedBy: post.savedBy || [],
           likedBy: post.likedBy || [],
           likes: post.likes || 0,
+          commentCount,
           ...(post.coverImageId
             ? {
                 coverImageUrl:
@@ -246,6 +246,9 @@ export const getLikedPosts = query({
         );
         const tagNames = tagDocs.filter(Boolean).map(tag => tag!.name);
 
+        // Calculate comment count using the helper function
+        const commentCount = await calculateCommentCount(ctx, post._id);
+
         return {
           ...post,
           author,
@@ -253,6 +256,7 @@ export const getLikedPosts = query({
           savedBy: post.savedBy || [],
           likedBy: post.likedBy || [],
           likes: post.likes || 0,
+          commentCount,
           ...(post.coverImageId
             ? {
                 coverImageUrl:
