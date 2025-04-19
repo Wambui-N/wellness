@@ -95,7 +95,7 @@ export default function TagFilter({ selectedTag, onTagSelect }: TagFilterProps) 
               "focus:outline-none focus:ring-2 focus:ring-black/50",
               selectedTag === tag 
                 ? "bg-black text-white shadow-md" 
-                : "bg-white/80 text-foreground hover:border-black/50",
+                : "bg-white/80 text-black hover:border-black/70",
               isScrolling && "pointer-events-none"
             )}
             onClick={() => onTagSelect(tag)}
