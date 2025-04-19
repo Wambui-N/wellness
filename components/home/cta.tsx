@@ -17,7 +17,7 @@ export function CTA() {
         <h2 className="text-3xl font-bold mb-6">
           Want to share your story?
         </h2>
-        <p className="text-muted-foreground mb-8">
+        <p className="text-black/70 mb-8">
           Join our community and inspire others with your healthcare journey.
         </p>
         <Link href="/sign-up">

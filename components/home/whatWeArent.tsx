@@ -52,7 +52,7 @@ const iconVariants = {
 
 export function WhatWeArent() {
   return (
-    <section className="relative py-24 overflow-hidden bg-white text-[#020C12]">
+    <section className="relative py-24 overflow-hidden bg-white text-black">
       {/* Background decorative elements */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute top-24 left-24 w-96 h-96 rounded-full bg-[#FF7F11]/5 blur-3xl" />
@@ -71,7 +71,7 @@ export function WhatWeArent() {
             What We{" "}
             <span className="bg-gradient-to-r from-[#FF7F11] to-[#81c4ee] bg-clip-text text-transparent">Are Not</span>
           </h2>
-          <p className="mt-4 text-[#020C12]/70 max-w-2xl mx-auto">
+          <p className="mt-4 text-black/70 max-w-2xl mx-auto">
             It&apos;s important to understand what our platform is not, to set the right expectations.
           </p>
         </motion.div>
@@ -95,9 +95,9 @@ export function WhatWeArent() {
                 </motion.div>
 
                 {/* Enhanced content box */}
-                <div className="flex-1 bg-white p-8 rounded-2xl border border-[#020C12]/5 shadow-[0_4px_24px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-shadow duration-300">
-                  <h3 className="text-2xl font-semibold mb-3 text-[#020C12]">{card.title}</h3>
-                  <p className="text-[#020C12]/70 leading-relaxed">{card.content}</p>
+                <div className="flex-1 bg-white p-8 rounded-2xl border border-black/5 shadow-[0_4px_24px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-shadow duration-300">
+                  <h3 className="text-2xl font-semibold mb-3 text-black">{card.title}</h3>
+                  <p className="text-black/70 leading-relaxed">{card.content}</p>
                 </div>
               </div>
             </motion.div>

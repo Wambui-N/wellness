@@ -22,6 +22,24 @@ export const getPosts = query({
         );
         const tagNames = tagDocs.filter(Boolean).map(tag => tag!.name);
 
+        // Get comment count for this post
+        const comments = await ctx.db
+          .query('comments')
+          .withIndex('byPostId', q => q.eq('postId', post._id))
+          .collect();
+
+        // Get replies to each comment and count them
+        const repliesPromises = comments.map(comment =>
+          ctx.db
+            .query('comments')
+            .withIndex('byParentId', q => q.eq('parentId', comment._id))
+            .collect()
+        );
+        
+        const replies = await Promise.all(repliesPromises);
+        const totalReplies = replies.reduce((sum, replyArray) => sum + replyArray.length, 0);
+        const commentCount = comments.length + totalReplies;
+
         return {
           ...post,
           author,
@@ -29,6 +47,7 @@ export const getPosts = query({
           savedBy: post.savedBy || [],
           likedBy: post.likedBy || [],
           likes: post.likes || 0,
+          commentCount,
           ...(post.coverImageId
             ? {
                 coverImageUrl:
@@ -49,9 +68,28 @@ export const getRecentPosts = query({
       posts.map(async post => {
         const author = await ctx.db.get(post.authorId)
 
+        // Get comment count for this post
+        const comments = await ctx.db
+          .query('comments')
+          .withIndex('byPostId', q => q.eq('postId', post._id))
+          .collect();
+
+        // Get replies to each comment and count them
+        const repliesPromises = comments.map(comment =>
+          ctx.db
+            .query('comments')
+            .withIndex('byParentId', q => q.eq('parentId', comment._id))
+            .collect()
+        );
+        
+        const replies = await Promise.all(repliesPromises);
+        const totalReplies = replies.reduce((sum, replyArray) => sum + replyArray.length, 0);
+        const commentCount = comments.length + totalReplies;
+
         return {
           ...post,
-          author
+          author,
+          commentCount
         }
       })
     )

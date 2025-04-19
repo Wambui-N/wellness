@@ -116,7 +116,7 @@ export default function Post({ slug }: { slug: string }) {
               variant="ghost"
               size="sm"
               className={`flex items-center gap-2 font-light ${
-                isLiked ? 'text-primary' : 'text-muted-foreground'
+                isLiked ? 'text-black' : 'text-muted-foreground'
               } hover:text-foreground`}
               onClick={handleLike}
             >
@@ -139,7 +139,7 @@ export default function Post({ slug }: { slug: string }) {
               variant="ghost"
               size="sm"
               className={`flex items-center gap-2 font-light ${
-                isSaved ? 'text-primary' : 'text-muted-foreground'
+                isSaved ? 'text-black' : 'text-muted-foreground'
               } hover:text-foreground`}
               onClick={handleSave}
             >

@@ -61,7 +61,7 @@ export default function PostItem({ post }: { post: Post }) {
                 alt={combineName(post.author)}
                 className='object-cover'
               />
-              <AvatarFallback className='bg-primary/10 text-primary'>
+              <AvatarFallback className='bg-black/10 text-black'>
                 {post.author?.firstName?.charAt(0)}
               </AvatarFallback>
             </Avatar>
@@ -77,8 +77,8 @@ export default function PostItem({ post }: { post: Post }) {
             variant="ghost"
             size="icon"
             onClick={handleSave}
-            className={`h-8 w-8 rounded-full hover:bg-primary/10 ${
-              isSaved ? 'text-primary' : 'text-muted-foreground'
+            className={`h-8 w-8 rounded-full hover:bg-black/10 ${
+              isSaved ? 'text-black' : 'text-muted-foreground'
             }`}
           >
             {isSaved ? (
@@ -93,7 +93,7 @@ export default function PostItem({ post }: { post: Post }) {
         <div className='flex gap-4'>
           <div className='flex-1 space-y-3'>
             <div className='space-y-1'>
-              <h3 className='font-serif text-xl font-bold leading-tight group-hover:text-primary'>
+              <h3 className='font-serif text-xl font-bold leading-tight group-hover:text-black'>
                 {post.title}
               </h3>
               <p className='text-sm text-muted-foreground line-clamp-2'>
@@ -108,7 +108,7 @@ export default function PostItem({ post }: { post: Post }) {
                   <Badge
                     key={tag}
                     variant='secondary'
-                    className='bg-primary/10 text-primary hover:bg-primary/20'
+                    className='bg-black/10 text-black hover:bg-black/20'
                   >
                     {tag}
                   </Badge>
