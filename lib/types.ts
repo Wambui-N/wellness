@@ -44,7 +44,7 @@ export type Comment = {
     likedArticles?: Id<'posts'>[]
     email: string
     clerkUserId: string
-  } | null
+  }
   likes?: number
   likedBy?: Id<'users'>[]
   parentId?: Id<'comments'>

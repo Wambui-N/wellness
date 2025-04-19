@@ -73,6 +73,7 @@ export const getRecentPosts = query({
     return Promise.all(
       posts.map(async post => {
         const author = await ctx.db.get(post.authorId)
+        if (!author) return null;
 
         // Calculate comment count using the helper function
         const commentCount = await calculateCommentCount(ctx, post._id);
@@ -83,7 +84,7 @@ export const getRecentPosts = query({
           commentCount
         }
       })
-    )
+    ).then(posts => posts.filter((post): post is NonNullable<typeof post> => post !== null))
   }
 })
 
@@ -167,6 +168,7 @@ export const getUserPosts = query({
     const postsWithData = await Promise.all(
       posts.map(async (post) => {
         const author = await ctx.db.get(post.authorId);
+        if (!author) return null;
         
         // Calculate comment count using the helper function
         const commentCount = await calculateCommentCount(ctx, post._id);
@@ -181,7 +183,7 @@ export const getUserPosts = query({
       })
     );
 
-    return postsWithData;
+    return postsWithData.filter((post): post is NonNullable<typeof post> => post !== null);
   },
 });
 

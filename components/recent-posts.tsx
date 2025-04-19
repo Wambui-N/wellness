@@ -41,11 +41,11 @@ export default function RecentPosts() {
                 <div className='inline-flex items-end gap-2'>
                   <Avatar className='size-5 ring-1 ring-white/20'>
                     <AvatarImage
-                      src={post.author?.imageUrl}
+                      src={post.author.imageUrl}
                       alt={combineName(post.author)}
                     />
                     <AvatarFallback className='bg-white/20 text-white'>
-                      {post.author?.firstName?.charAt(0)}
+                      {post.author.firstName?.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
 
