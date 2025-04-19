@@ -23,7 +23,7 @@ export type Post = {
     posts?: Id<'posts'>[] | undefined
     email: string
     clerkUserId: string
-  } | null
+  }
   tagNames?: string[]
   likedBy?: Id<'users'>[]
 }
