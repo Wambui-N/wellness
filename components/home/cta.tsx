@@ -2,6 +2,7 @@
 
 import { motion } from 'motion/react'
 import { Button } from "../ui/button"
+import Link from 'next/link'
 
 export function CTA() {
   return (
@@ -19,6 +20,7 @@ export function CTA() {
         <p className="text-muted-foreground mb-8">
           Join our community and inspire others with your healthcare journey.
         </p>
+        <Link href="/sign-up">
         <Button
           variant="default"
           className="bg-[#020c12] text-white hover:bg-[#020c12]/90"
@@ -26,6 +28,7 @@ export function CTA() {
         >
           Submit Your Story
         </Button>
+        </Link>
       </motion.div>
     </section>
   )
