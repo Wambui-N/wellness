@@ -74,7 +74,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-white font-satoshi text-foreground;
+    @apply bg-white font-satoshi text-black;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-gloria;
