@@ -22,64 +22,65 @@ import { Button } from '@/components/ui/button'
 export default function Header() {
   const { user } = useUser()
   const userData = useQuery(api.users.current)
-  
-  const profileUrl = user?.firstName && user?.lastName 
-    ? `/author/${user.firstName.toLowerCase()}-${user.lastName.toLowerCase()}`
-    : '/'
+
+  const profileUrl =
+    user?.firstName && user?.lastName
+      ? `/author/${user.firstName.toLowerCase()}-${user.lastName.toLowerCase()}`
+      : '/'
 
   return (
-    <header className='fixed inset-x-0 top-0 z-50 bg-white/80 py-4 backdrop-blur-sm border-b border-gray-200'>
+    <header className='fixed inset-x-0 top-0 z-50 border-b border-gray-200 bg-white/80 py-4 backdrop-blur-sm'>
       <nav className='container flex max-w-none items-center justify-between'>
-        <Link 
-          href='/' 
-          className='flex items-center gap-2 font-serif text-xl font-semibold text-black hover:text-black/70 transition-colors'
+        <Link
+          href='/'
+          className='flex items-center gap-2 font-serif text-xl font-semibold text-black transition-colors hover:text-black/70'
         >
-          <Image 
-            src="/WD Dark Logo.png" 
-            alt="The Wellness Notebook Logo" 
-            width={32} 
+          <Image
+            src='/WD Dark Logo.png'
+            alt='The Wellness Notebook Logo'
+            width={32}
             height={32}
-            className="h-8 w-8"
+            className='h-8 w-8'
           />
           <span>The Wellness Notebook</span>
         </Link>
 
         <div className='flex items-center gap-6'>
           <SignedIn>
-            <Button 
-              size='sm' 
-              variant='outline' 
-              asChild 
-              className="flex items-center gap-2 hover:bg-black/5 hover:text-black border-gray-300"
+            <Button
+              size='sm'
+              variant='outline'
+              asChild
+              className='flex items-center gap-2 border-gray-300 hover:bg-black/5 hover:text-black'
             >
               <Link href='/write'>
-                <Pencil className="h-4 w-4" />
+                <Pencil className='h-4 w-4' />
                 Write
               </Link>
             </Button>
           </SignedIn>
 
           <SignedOut>
-            <Link 
-              href='/about' 
-              className="text-sm text-gray-600 hover:text-black transition-colors"
+            <Link
+              href='/about'
+              className='text-sm text-gray-600 transition-colors hover:text-black'
             >
               About
             </Link>
           </SignedOut>
 
           <SignedIn>
-            <Link 
-              href={profileUrl} 
-              className="flex items-center rounded-full ring-1 ring-gray-300 p-1 hover:ring-black/30 transition-all"
+            <Link
+              href={profileUrl}
+              className='flex items-center rounded-full p-1 ring-1 ring-gray-300 transition-all hover:ring-black/30'
             >
               {userData?.imageUrl ? (
-                <Image 
-                  src={userData.imageUrl} 
-                  alt="Profile" 
+                <Image
+                  src={userData.imageUrl}
+                  alt='Profile'
                   width={32}
                   height={32}
-                  className="h-8 w-8 rounded-full object-cover"
+                  className='h-8 w-8 rounded-full object-cover'
                 />
               ) : (
                 <User className='h-6 w-6 text-gray-600' />
@@ -88,11 +89,11 @@ export default function Header() {
           </SignedIn>
 
           <SignedOut>
-            <SignInButton mode="modal">
-              <Button 
-                size='sm' 
+            <SignInButton mode='modal'>
+              <Button
+                size='sm'
                 variant='outline'
-                className="hover:bg-black/5 hover:text-black border-gray-300"
+                className='border-gray-300 hover:bg-black/5 hover:text-black'
               >
                 Sign in
               </Button>

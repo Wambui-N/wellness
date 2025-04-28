@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 const footer = () => {
   return (
@@ -19,8 +20,18 @@ const footer = () => {
               <p className='text-white text-sm'>© 2025 The Wellness Notebook. All rights reserved.</p>
             </div>
             <div className='flex space-x-4'>
-              <a href='#' className='text-white text-sm'>Privacy Policy</a>
-              <a href='#' className='text-white text-sm'>Terms of Service</a>
+              <Link 
+                href="/privacy" 
+                className="text-white text-sm"
+              >
+                Privacy Policy
+              </Link>
+              <Link 
+                href="/terms" 
+                className="text-white text-sm"
+              >
+                Terms & Conditions
+              </Link>
             </div>
         </div>
     </footer>
