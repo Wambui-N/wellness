@@ -33,7 +33,7 @@ export default function Header() {
       <nav className='container flex max-w-none items-center justify-between'>
         <Link
           href='/'
-          className='flex items-center gap-2 font-serif text-xl font-semibold text-black transition-colors hover:text-black/70'
+          className='flex items-center gap-2 font-serif text-xl font-semibold text-black transition-colors'
         >
           <Image
             src='/WD Dark Logo.png'

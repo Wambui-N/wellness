@@ -1,115 +1,102 @@
 'use client'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { motion } from "motion/react"
 
-export default function TermsAndConditions() {
+export default function TermsPage() {
   return (
-    <div className="container mx-auto py-24">
-      <Card className="bg-black/80 backdrop-blur-md border-white/20 shadow-2xl">
-        <CardHeader>
-          <CardTitle className="text-white text-3xl font-serif">Terms and Conditions of Use and Participation</CardTitle>
-        </CardHeader>
-        <CardContent className="prose prose-invert max-w-none">
-          <section className="mb-8">
-            <h2 className="text-white/90 text-2xl font-serif mb-4">Introduction</h2>
-            <p className="text-white/80">
-              This website is for everyone. It is an interactive platform for sharing experiences in the wellness journey. The aim is the democratisation of knowledge and information about healthcare services in our country, while challenging healthcare providers to be more responsive.
-            </p>
-            <p className="text-white/80">
-              We aim to become the number one digital platform for sharing experiences, useful information, chit-chat and gossip about health and wellness. Every adult is welcome and encouraged to participate, subject to the following general rules and terms.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-white/90 text-2xl font-serif mb-4">Good Faith and Ethics</h2>
-            <p className="text-white/80">
-              The website and its affiliated social media pages shall not wage hate or vendetta against any healthcare provider, whether private or public, individual or institutional. We shall support any criticism made in good faith. However, the admin retains the discretion to vet posts to curb malice or deliberate falsification.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-white/90 text-2xl font-serif mb-4">Embrace Diversity. Be sensitive. Be responsible</h2>
-            <p className="text-white/80 mb-4">
-              We are building a community of shared experiences. This may involve discussing personally intimate experiences. Our interactions must be sensitive and respectful to cultivate an atmosphere of mutual trust and a sense of family.
-            </p>
-            <ul className="list-disc list-inside text-white/80 space-y-2">
-              <li>Do not be rude, abusive or judgmental to anybody seeking help in the group.</li>
-              <li>Appreciate and respect our diversity; refrain from any bullying or prejudicial attitude towards other people's identities, be it cultural, religious, gender, or age.</li>
-              <li>Offenders will be blocked at the discretion of the admin.</li>
-            </ul>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-white/90 text-2xl font-serif mb-4">No Unauthorised Business Marketing</h2>
-            <p className="text-white/80">
-              All advertisements or promotions on the website must be channelled through the admin. Unapproved adverts will be deleted, and repeat offenders will be blocked.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-white/90 text-2xl font-serif mb-4">Have Fun</h2>
-            <p className="text-white/80">
-              Humour and laughter are core objectives of the website. Go ahead and light the moment! Share with us that "unserious" thing you encountered at the doctor's clinic, the ward, and even in the theatre. Make us laugh, but all in the context of wellness.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-white/90 text-2xl font-serif mb-4">No Politics; No Religion</h2>
-            <p className="text-white/80">
-              Partisan political opinions are not allowed on the website or social media to safeguard our diversity. Political sentiments may be tolerated under special circumstances, but the discretion remains with the admin.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-white/90 text-2xl font-serif mb-4">Promote the Site</h2>
-            <p className="text-white/80">
-              We encourage all members to promote the site by inviting their friends and associates to subscribe and become active members. Stronger together.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-white/90 text-2xl font-serif mb-4">Generosity and Kindness</h2>
-            <p className="text-white/80">
-              We're all in this together; let us cultivate and champion a culture of love and community. Arise and support each other generously by sharing personal experiences, information and tips on how to cope with situations, ailments and circumstances. Let us cultivate a strong and vibrant community of self-support, always guided by a deep spirit of human kindness and empathy.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-white/90 text-2xl font-serif mb-4">No Spam. No Plagiarism</h2>
-            <p className="text-white/80">
-              Acknowledge and disclose borrowed information. Don't spam the site with superfluous or irrelevant information or share unnecessary external links.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-white/90 text-2xl font-serif mb-4">Respect Others' Privacy</h2>
-            <p className="text-white/80">
-              People will share a lot of confidential and personal information in search of emotional support and advice. Respect their privacy; protect their dignity. It behoves every member to be mature and understanding. We will block those who offend this principle.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-white/90 text-2xl font-serif mb-4">Talk to the Admin/s</h2>
-            <p className="text-white/80">
-              If you have questions or concerns, contact the admins or moderators.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-white/90 text-2xl font-serif mb-4">Protect the Site Integrity</h2>
-            <p className="text-white/80">
-              All of us must keep our group values intact. If you see someone breaking the rules, please alert the admins for appropriate action. Also, feel free to make proposals on how best we can manage the site and maximise its utility value to the members.
+    <div className="container mx-auto py-24 px-4">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-4xl mx-auto"
+      >
+        <h1 className="text-4xl font-gloria text-gray-900 mb-8">Terms and Conditions of Use and Participation</h1>
+        
+        <div className="prose prose-lg max-w-none space-y-8">
+          <section>
+            <h2 className="text-2xl font-gloria text-gray-800 mb-4">Introduction</h2>
+            <p className="text-gray-600">
+              Welcome to Wellness Notebook. This website is designed to be a platform for sharing experiences and knowledge about healthcare and wellness. By accessing and using this website, you agree to be bound by these Terms and Conditions.
             </p>
           </section>
 
           <section>
-            <h2 className="text-white/90 text-2xl font-serif mb-4">Information in Good Faith. No Obligation</h2>
-            <p className="text-white/80">
-              The group exists to advance our collective wellness by sharing information. Opinions and advice from group members are provided in good faith, but we do not take responsibility for accuracy. Relying on them is at your sole risk. Membership and contributions to the group are predicated on your agreement to defend, indemnify and hold harmless The Wellness Notebook for any consequences.
+            <h2 className="text-2xl font-gloria text-gray-800 mb-4">Good Faith and Ethics</h2>
+            <p className="text-gray-600">
+              All users are expected to participate in good faith and maintain high ethical standards. This includes:
+            </p>
+            <ul className="text-gray-600 list-disc pl-6 space-y-2">
+              <li>Providing accurate and truthful information</li>
+              <li>Respecting the privacy and confidentiality of others</li>
+              <li>Not engaging in any form of harassment or discrimination</li>
+              <li>Not sharing misleading or harmful medical advice</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-gloria text-gray-800 mb-4">Embrace Diversity</h2>
+            <p className="text-gray-600">
+              We welcome and encourage diverse perspectives and experiences. Discrimination of any kind, including based on race, gender, religion, or health status, will not be tolerated.
             </p>
           </section>
-        </CardContent>
-      </Card>
+
+          <section>
+            <h2 className="text-2xl font-gloria text-gray-800 mb-4">Content Guidelines</h2>
+            <p className="text-gray-600">
+              When contributing content to the website:
+            </p>
+            <ul className="text-gray-600 list-disc pl-6 space-y-2">
+              <li>Share personal experiences and insights</li>
+              <li>Cite sources when sharing medical information</li>
+              <li>Do not post copyrighted material without permission</li>
+              <li>Do not share personal information of others without consent</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-gloria text-gray-800 mb-4">Advertising and Sponsorship</h2>
+            <p className="text-gray-600">
+              Any advertising or sponsorship content will be clearly marked as such. We maintain editorial independence and do not allow advertisers to influence our content.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-gloria text-gray-800 mb-4">Privacy and Data Protection</h2>
+            <p className="text-gray-600">
+              We are committed to protecting your privacy. Please refer to our Privacy Policy for detailed information about how we collect, use, and protect your personal data.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-gloria text-gray-800 mb-4">Intellectual Property</h2>
+            <p className="text-gray-600">
+              All content on this website, including text, graphics, logos, and software, is the property of Wellness Notebook or its content suppliers and is protected by international copyright laws.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-gloria text-gray-800 mb-4">Limitation of Liability</h2>
+            <p className="text-gray-600">
+              Wellness Notebook is not responsible for any medical decisions made based on information shared on this platform. Users should always consult with qualified healthcare professionals for medical advice.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-gloria text-gray-800 mb-4">Modifications to Terms</h2>
+            <p className="text-gray-600">
+              We reserve the right to modify these terms at any time. Changes will be effective immediately upon posting to the website. Your continued use of the website after any changes indicates your acceptance of the modified terms.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-gloria text-gray-800 mb-4">Contact Information</h2>
+            <p className="text-gray-600">
+              If you have any questions about these Terms and Conditions, please contact us through the provided contact information on our website.
+            </p>
+          </section>
+        </div>
+      </motion.div>
     </div>
   )
 } 
