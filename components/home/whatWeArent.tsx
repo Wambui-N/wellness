@@ -1,107 +1,100 @@
-"use client"
+'use client'
 
-import { motion } from "framer-motion"
-import { X } from "lucide-react"
-
-const whatWeArent = [
-  {
-    title: "Not a Medical Advice Platform",
-    content:
-      "We do not provide medical advice or diagnoses. Our platform is for sharing experiences and stories about healthcare journeys.",
-  },
-  {
-    title: "Not a Review Site",
-    content:
-      "While we encourage sharing experiences, we are not a traditional review site. We focus on storytelling and community building rather than ratings.",
-  },
-  {
-    title: "Not a Healthcare Provider",
-    content:
-      "We are not healthcare providers or medical professionals. We are a platform for patients to share their experiences and support each other.",
-  },
-]
-
-const container = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-    },
-  },
-}
-
-const item = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0 },
-}
-
-const iconVariants = {
-  hidden: { scale: 0.8, opacity: 0 },
-  show: {
-    scale: 1,
-    opacity: 1,
-    transition: {
-      type: "spring",
-      stiffness: 300,
-      damping: 20,
-      delay: 0.1,
-    },
-  },
-}
+import { motion } from 'framer-motion'
+import { AlertTriangle, ClipboardX, BookX } from 'lucide-react'
 
 export function WhatWeArent() {
   return (
-    <section className="relative py-24 overflow-hidden bg-white text-black">
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute top-24 left-24 w-96 h-96 rounded-full bg-[#FF7F11]/5 blur-3xl" />
-        <div className="absolute -bottom-24 right-24 w-96 h-96 rounded-full bg-[#81c4ee]/5 blur-3xl" />
-      </div>
-
-      <div className="container mx-auto px-4">
+    <section className='bg-[#020C12]/5 py-24'>
+      <div className='container mx-auto px-4'>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="max-w-3xl mx-auto text-center mb-16"
+          className='mx-auto max-w-4xl'
         >
-          <h2 className="text-4xl font-bold mb-6 leading-tight">
-            What We{" "}
-            <span className="bg-gradient-to-r from-[#FF7F11] to-[#81c4ee] bg-clip-text text-transparent">Are Not</span>
+          <h2 className='mb-6 text-center text-3xl font-bold'>
+            What we are not
           </h2>
-          <p className="mt-4 text-black/70 max-w-2xl mx-auto">
-            It&apos;s important to understand what our platform is not, to set the right expectations.
+          <p className='mb-12 text-center text-xl text-[#020C12]/70'>
+            The Wellness Notebook is strictly an informal platform for general
+            information and subjective opinions about healthcare in our society
+            by members of the public. Information or debates that we carry are
+            not medical advice. It is meant to assist the users to become
+            better, wiser and more enlightened in their search for qualified
+            medical help. We therefore take no responsibility for use of any
+            information on this site.
           </p>
-        </motion.div>
-
-        <motion.div
-          variants={container}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          className="max-w-4xl mx-auto"
-        >
-          {whatWeArent.map((card, index) => (
-            <motion.div key={index} variants={item} className="mb-12 last:mb-0">
-              <div className="flex items-start gap-6">
-                {/* Enhanced X icon in circle */}
-                <motion.div
-                  variants={iconVariants}
-                  className="flex-shrink-0 w-16 h-16 rounded-full bg-gradient-to-br from-[#FF7F11] to-[#FF7F11]/80 flex items-center justify-center shadow-lg"
-                >
-                  <X className="w-8 h-8 text-white" />
-                </motion.div>
-
-                {/* Enhanced content box */}
-                <div className="flex-1 bg-white p-8 rounded-2xl border border-black/5 shadow-[0_4px_24px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] transition-shadow duration-300">
-                  <h3 className="text-2xl font-semibold mb-3 text-black">{card.title}</h3>
-                  <p className="text-black/70 leading-relaxed">{card.content}</p>
-                </div>
-              </div>
+          <p className='mb-12 text-center text-xl text-[#020C12]/70'>
+            It's important to know what we are not to manage expectations
+          </p>
+          <div className='grid grid-cols-1 gap-8 md:grid-cols-3'>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className='rounded-2xl border border-[#020C12]/5 bg-white p-6 shadow-sm transition-shadow hover:shadow-md'
+            >
+              <AlertTriangle className='mb-4 h-8 w-8 text-[#FF7F11]' />
+              <h3 className='mb-3 text-xl font-semibold'>
+                We are not a medical practice
+              </h3>
+              <p className='text-[#020C12]/70'>
+                We are just a platform for sharing experiences and encounters in
+                the wellness journey
+              </p>
             </motion.div>
-          ))}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className='rounded-2xl border border-[#020C12]/5 bg-white p-6 shadow-sm transition-shadow hover:shadow-md'
+            >
+              <ClipboardX className='mb-4 h-8 w-8 text-[#81c4ee]' />
+              <h3 className='mb-3 text-xl font-semibold'>
+                We don’t diagnose or treat.
+              </h3>
+              <p className='text-[#020C12]/70'>
+                Our information sharing is informal and does not substitute
+                professional medical attention
+              </p>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className='rounded-2xl border border-[#020C12]/5 bg-white p-6 shadow-sm transition-shadow hover:shadow-md'
+            >
+              <ClipboardX className='mb-4 h-8 w-8 text-[#81c4ee]' />
+              <h3 className='mb-3 text-xl font-semibold'>
+              We don’t register or license
+              </h3>
+              <p className='text-[#020C12]/70'>
+              We comment on our experiences with doctors, clinics and hospitals. Purely as patients
+              but not licensing authority
+              </p>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className='rounded-2xl border border-[#020C12]/5 bg-white p-6 shadow-sm transition-shadow hover:shadow-md'
+            >
+              <BookX className='mb-4 h-8 w-8 text-[#FF7F11]' />
+              <h3 className='mb-3 text-xl font-semibold'>
+                Not a medical journal
+              </h3>
+              <p className='text-[#020C12]/70'>
+                We are not a forum for technical medical information. We only
+                share wellness experiences as members of the public
+              </p>
+            </motion.div>
+          </div>
         </motion.div>
       </div>
     </section>
