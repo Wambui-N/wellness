@@ -67,7 +67,7 @@ export default function PrivacyPage() {
               <li>Preventing and detecting fraud or other crimes.</li>
               <li>In business practices, including quality control, training, and ensuring effective system operations.</li>
               <li>To recognise you during subsequent visits to our website and develop customised information suited to your interests and needs.</li>
-              <li>To protect your interests (or someone else's interests regarding security, health and safety, and public health regulations).</li>
+              <li>To protect your interests (or someone&apos;s interests regarding security, health and safety, and public health regulations).</li>
               <li>To send you marketing and promotional communications, subject to your consent.</li>
               <li>To contact you about your use of our website or any related business and service cooperation</li>
               <li>To collect aggregated demographic information for our business operations and strategies. This sharing does not include any Personal Data that can identify any person.</li>
