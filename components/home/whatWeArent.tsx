@@ -27,7 +27,7 @@ export function WhatWeArent() {
             information on this site.
           </p>
           <p className='mb-12 text-center text-xl text-[#020C12]/70'>
-            It's important to know what we are not to manage expectations
+            It&apos;s important to know what we are not to manage expectations
           </p>
           <div className='grid grid-cols-1 gap-8 md:grid-cols-3'>
             <motion.div
@@ -55,7 +55,7 @@ export function WhatWeArent() {
             >
               <ClipboardX className='mb-4 h-8 w-8 text-[#81c4ee]' />
               <h3 className='mb-3 text-xl font-semibold'>
-                We don’t diagnose or treat.
+                We don&apos;t diagnose or treat.
               </h3>
               <p className='text-[#020C12]/70'>
                 Our information sharing is informal and does not substitute
@@ -71,7 +71,7 @@ export function WhatWeArent() {
             >
               <ClipboardX className='mb-4 h-8 w-8 text-[#81c4ee]' />
               <h3 className='mb-3 text-xl font-semibold'>
-              We don’t register or license
+              We don&apos;t register or license
               </h3>
               <p className='text-[#020C12]/70'>
               We comment on our experiences with doctors, clinics and hospitals. Purely as patients
